@@ -18,7 +18,9 @@ type Props = {
   /** Columna izquierda opcional (el perrito en el ahorcado). */
   lateral?: ReactNode
   children: ReactNode
-  onReintentar: () => void
+  onReintentarGuardado: () => void
+  /** Al perder: otra partida con el mismo jugador, sin volver al registro. */
+  onReintentarPartida: () => void
   onRanking: () => void
   onOtraVez: () => void
 }
@@ -59,8 +61,8 @@ function PantallaResultado(props: Props) {
           {guardado.tipo === 'error' && (
             <div role="alert" className="alerta" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <span style={{ flex: 1 }}>{guardado.mensaje}</span>
-              <button type="button" className="btn btn-secundario" style={{ height: 48, fontSize: 18 }} onClick={props.onReintentar}>
-                Reintentar
+              <button type="button" className="btn btn-secundario" style={{ height: 48, fontSize: 18 }} onClick={props.onReintentarGuardado}>
+                Volver a guardar
               </button>
             </div>
           )}
@@ -70,14 +72,28 @@ function PantallaResultado(props: Props) {
             <span>Ya estás participando en el sorteo</span>
           </div>
 
-          <div className="resultado-acciones">
-            <button type="button" className="btn btn-secundario" onClick={props.onRanking}>
-              Ver ranking
-            </button>
-            <button type="button" className="btn btn-primario" onClick={props.onOtraVez}>
-              Jugar de nuevo
-            </button>
-          </div>
+          {gana ? (
+            <div className="resultado-acciones">
+              <button type="button" className="btn btn-secundario" onClick={props.onRanking}>
+                Ver ranking
+              </button>
+              <button type="button" className="btn btn-primario" onClick={props.onOtraVez}>
+                Jugar de nuevo
+              </button>
+            </div>
+          ) : (
+            <div className="resultado-acciones con-reintento">
+              <button type="button" className="btn btn-primario" onClick={props.onReintentarPartida}>
+                Reintentar
+              </button>
+              <button type="button" className="btn btn-secundario" onClick={props.onRanking}>
+                Ver ranking
+              </button>
+              <button type="button" className="btn btn-secundario" onClick={props.onOtraVez}>
+                Nuevo jugador
+              </button>
+            </div>
+          )}
         </div>
         <div className="resultado-qr">
           <CodigoQr url={urlPersonal} />

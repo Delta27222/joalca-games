@@ -1,10 +1,11 @@
-import { useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 import Cronometro from '../components/Cronometro.tsx'
 import Encabezado from '../components/Encabezado.tsx'
 import type { PropsJuego } from '../components/FlujoDeJuego.tsx'
 import { SOPA } from '../config/juegos.ts'
 import {
   buscarPalabra,
+  elegirPista,
   ErrorDeConfiguracion,
   generarTablero,
   lineaEntre,
@@ -56,11 +57,23 @@ function TableroSopa({ tablero, inicio, onTerminar }: PropsJuego<DetalleSopa> & 
   const [rechazo, setRechazo] = useState<Celda[]>([])
   const [recien, setRecien] = useState<number | null>(null)
   const [terminado, setTerminado] = useState<'gana' | 'pierde' | null>(null)
+  const [pista, setPista] = useState<Celda | null>(null)
+  const [bonus, setBonus] = useState(false)
+  const [avisoBonus, setAvisoBonus] = useState(false)
   const arrastre = useRef<{ desde: Celda; hasta: Celda; pointerId: number } | null>(null)
 
   const activo = inicio !== null && terminado === null
-  const restante = useRestante(inicio ?? 0, SOPA.limiteMs, activo, () => terminar(false, encontradas))
+  const limite = SOPA.limiteMs + (bonus ? SOPA.bonus.ms : 0)
+  const restante = useRestante(inicio ?? 0, limite, activo, () => terminar(false, encontradas))
   const total = tablero.ubicaciones.length
+
+  // Si pasan 15 s sin encontrar una palabra, se ilumina una letra de ayuda.
+  // Cada palabra encontrada (o cada pista nueva) reinicia la espera.
+  useEffect(() => {
+    if (!activo) return
+    const id = setTimeout(() => setPista(elegirPista(tablero.ubicaciones, encontradas)), SOPA.pistaTrasMs)
+    return () => clearTimeout(id)
+  }, [activo, encontradas, pista, tablero])
 
   function terminar(gana: boolean, lista: number[]) {
     setTerminado(gana ? 'gana' : 'pierde')
@@ -83,7 +96,14 @@ function TableroSopa({ tablero, inicio, onTerminar }: PropsJuego<DetalleSopa> & 
       const nuevas = [...encontradas, ubicacion.indice]
       setEncontradas(nuevas)
       setRecien(ubicacion.indice)
-      if (nuevas.length === total) terminar(true, nuevas)
+      setPista(null)
+      if (nuevas.length === total) {
+        terminar(true, nuevas)
+      } else if (nuevas.length === SOPA.bonus.palabras && !bonus) {
+        setBonus(true)
+        setAvisoBonus(true)
+        setTimeout(() => setAvisoBonus(false), 4000)
+      }
     } else if (linea.length > 1) {
       setRechazo(linea)
       setTimeout(() => setRechazo([]), 320)
@@ -150,6 +170,7 @@ function TableroSopa({ tablero, inicio, onTerminar }: PropsJuego<DetalleSopa> & 
   }
   const seleccionadas = new Set(seleccion.map(clave))
   const rechazadas = new Set(rechazo.map(clave))
+  const clavePista = pista && activo ? clave(pista) : null
   const recienCeldas = new Set(
     recien === null ? [] : tablero.ubicaciones.find((u) => u.indice === recien)?.celdas.map(clave),
   )
@@ -179,6 +200,7 @@ function TableroSopa({ tablero, inicio, onTerminar }: PropsJuego<DetalleSopa> & 
                 fondo = colorDe.get(k)
                 if (recienCeldas.has(k)) clases.push('recien')
               } else if (faltante.has(k)) clases.push('faltante')
+              else if (k === clavePista) clases.push('pista')
               return (
                 <div key={k} className={clases.join(' ')} style={fondo ? { background: fondo } : undefined} data-fila={f} data-col={c}>
                   {inicio === null ? '' : letra}
@@ -189,7 +211,17 @@ function TableroSopa({ tablero, inicio, onTerminar }: PropsJuego<DetalleSopa> & 
         </div>
 
         <aside className="lateral">
-          <Cronometro restanteMs={restante} />
+          <Cronometro restanteMs={restante} bonus={avisoBonus} />
+          {avisoBonus && (
+            <div className="aviso-bonus" role="status">
+              ¡+{SOPA.bonus.ms / 1000} segundos! Encontraste {SOPA.bonus.palabras} beneficios
+            </div>
+          )}
+          {clavePista && !avisoBonus && (
+            <div className="aviso-pista" role="status">
+              ¡Una ayuda! Un beneficio pasa por la letra que brilla
+            </div>
+          )}
           {terminado === 'pierde' && (
             <div className="aviso-perdido">¡Tiempo terminado! Las palabras en rojo eran las que faltaban.</div>
           )}

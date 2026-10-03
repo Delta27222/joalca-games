@@ -148,7 +148,8 @@ function FlujoDeJuego<D>({ juego, renderJuego, renderResultado }: Props<D>) {
           jugadorId={jugadorId}
           guardado={guardado}
           lateral={lateral}
-          onReintentar={() => void guardar(final)}
+          onReintentarGuardado={() => void guardar(final)}
+          onReintentarPartida={comenzar}
           onRanking={() => navigate(`/leaderboard?juego=${juego}&jugador=${jugadorId}`)}
           onOtraVez={() => {
             // Registro vacío para la siguiente persona.

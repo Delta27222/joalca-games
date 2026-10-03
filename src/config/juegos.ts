@@ -23,6 +23,10 @@ export const SOPA = {
   nombre: 'Encuentra los beneficios',
   titulo: 'Encuentra los beneficios de Taste Of The Wild',
   limiteMs: 120_000,
+  // Al encontrar `palabras` beneficios se suman `ms` al cronómetro (una vez).
+  bonus: { palabras: 5, ms: 15_000 },
+  // Sin encontrar una palabra durante este tiempo, se ilumina una letra de ayuda.
+  pistaTrasMs: 15_000,
   tamano: 13,
   // Se muestran tal cual en la lista; en el tablero van sin tildes.
   palabras: [
@@ -38,7 +42,7 @@ export const SOPA = {
     'VITALIDAD',
   ],
   regla:
-    'Encuentra los 10 beneficios escondidos en el tablero. Arrastra el dedo de la primera a la última letra, o toca la primera y luego la última.',
+    'Encuentra los 10 beneficios escondidos en el tablero. Arrastra el dedo de la primera a la última letra, o toca la primera y luego la última. Al encontrar 5, ganas 15 segundos extra.',
 }
 
 export const AHORCADO = {
@@ -63,4 +67,12 @@ export const AHORCADO = {
 
 export function limiteMs(juego: JuegoId): number {
   return juego === 'sopa' ? SOPA.limiteMs : AHORCADO.limiteMs
+}
+
+/**
+ * El tiempo más largo que puede durar una partida ganada. En la sopa, ganar
+ * exige pasar por el bonus, así que el límite incluye esos segundos extra.
+ */
+export function limiteMaximoMs(juego: JuegoId): number {
+  return juego === 'sopa' ? SOPA.limiteMs + SOPA.bonus.ms : AHORCADO.limiteMs
 }

@@ -716,6 +716,46 @@ button {
   }
 }
 
+.cronometro.bonus-tiempo {
+  background: var(--success);
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.cronometro.bonus-tiempo .cronometro-valor {
+  animation: celebra 600ms ease 2;
+}
+
+.aviso-bonus,
+.aviso-pista {
+  border-radius: 16px;
+  padding: 14px 20px;
+  font-family: var(--font-titulo);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  animation: aparece 300ms ease both;
+}
+
+.aviso-bonus {
+  background: var(--success-bg);
+  color: var(--success-text);
+  box-shadow: inset 0 0 0 2px var(--success);
+}
+
+.aviso-pista {
+  background: #fff6d6;
+  color: #7a5a00;
+  box-shadow: inset 0 0 0 2px #f7c548;
+}
+
+@keyframes aparece {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
 .panel {
   border-radius: 20px;
   padding: 20px 24px;
@@ -792,6 +832,19 @@ button {
   background: var(--danger-bg);
   color: var(--danger-text);
   box-shadow: inset 0 0 0 2px var(--danger);
+}
+
+.celda.pista {
+  background: #f7c548;
+  box-shadow: 0 0 0 3px rgba(247, 197, 72, 0.45);
+  animation: brilla 1.2s ease-in-out infinite;
+}
+
+@keyframes brilla {
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 6px rgba(247, 197, 72, 0.25);
+  }
 }
 
 .celda.rechazo {
@@ -1232,6 +1285,20 @@ ul.lista-palabras {
   padding: 0 16px;
   font-size: 22px;
   white-space: nowrap;
+}
+
+/* Al perder: "Reintentar" ocupa toda la fila y los otros dos van debajo. */
+.resultado-acciones.con-reintento {
+  flex-wrap: wrap;
+}
+
+.resultado-acciones.con-reintento .btn:first-child {
+  flex-basis: 100%;
+}
+
+.resultado-acciones.con-reintento .btn-secundario {
+  height: 56px;
+  font-size: 20px;
 }
 
 .resultado-qr {

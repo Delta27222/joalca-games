@@ -1,4 +1,4 @@
-import { AHORCADO, limiteMs, type JuegoId } from '../src/config/juegos.js'
+import { AHORCADO, limiteMaximoMs, type JuegoId } from '../src/config/juegos.js'
 import { db } from './_lib/db.js'
 import { ErrorHttp, json, leerJson, manejar, uuid } from './_lib/http.js'
 import { posicionDe } from './_lib/ranking.js'
@@ -41,7 +41,7 @@ export const POST = manejar(async (request) => {
   if (!partida) throw new ErrorHttp(404, 'Partida no encontrada')
   if (partida.fin_at) throw new ErrorHttp(409, 'La partida ya terminó')
 
-  const limite = limiteMs(partida.juego)
+  const limite = limiteMaximoMs(partida.juego)
   if (declarado === 'gana' && partida.transcurrido_ms < MINIMO_MS) {
     throw new ErrorHttp(422, 'Tiempo no válido')
   }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { AHORCADO, SOPA } from '../config/juegos.ts'
 import { elegirLetrasDePista, estaCompleta, letrasDe } from './ahorcado.ts'
-import { buscarPalabra, ErrorDeConfiguracion, generarTablero, lineaEntre } from './sopa.ts'
+import { buscarPalabra, elegirPista, ErrorDeConfiguracion, generarTablero, lineaEntre } from './sopa.ts'
 import { formatearTiempo, normalizar } from './texto.ts'
 
 // Generador determinista para que las pruebas sean repetibles.
@@ -88,5 +88,26 @@ describe('letras de pista', () => {
   it('la frase está completa cuando todas sus letras están reveladas', () => {
     expect(estaCompleta(frase, new Set(letrasDe(frase)))).toBe(true)
     expect(estaCompleta(frase, new Set(['H', 'D']))).toBe(false)
+  })
+})
+
+describe('letra de ayuda de la sopa', () => {
+  const t = generarTablero(SOPA.palabras, SOPA.tamano, semilla(11))
+
+  it('es la inicial o una intermedia de una palabra no encontrada, nunca la última', () => {
+    const encontradas = [0, 1, 2]
+    for (let s = 1; s <= 200; s++) {
+      const celda = elegirPista(t.ubicaciones, encontradas, semilla(s))!
+      const dueña = t.ubicaciones.find(
+        (u) => !encontradas.includes(u.indice) && u.celdas.some((c) => c.fila === celda.fila && c.col === celda.col),
+      )
+      expect(dueña).toBeDefined()
+      const pos = dueña!.celdas.findIndex((c) => c.fila === celda.fila && c.col === celda.col)
+      expect(pos).toBeLessThan(dueña!.celdas.length - 1)
+    }
+  })
+
+  it('no hay pista si ya están todas', () => {
+    expect(elegirPista(t.ubicaciones, t.ubicaciones.map((u) => u.indice))).toBeNull()
   })
 })
