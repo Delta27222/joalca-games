@@ -1,7 +1,9 @@
+import { CODIGOS_TELEFONO, DIGITOS_TELEFONO } from '../src/config/juegos.js'
 import { db } from './_lib/db.js'
 import { ErrorHttp, json, leerJson, manejar } from './_lib/http.js'
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const TELEFONO = new RegExp(`^(${CODIGOS_TELEFONO.join('|')})\\d{${DIGITOS_TELEFONO}}$`)
 
 /** Crea o actualiza al jugador por su teléfono. Devuelve solo su id. */
 export const POST = manejar(async (request) => {
@@ -11,8 +13,8 @@ export const POST = manejar(async (request) => {
   if (nombre.length < 1 || nombre.length > 60) throw new ErrorHttp(400, 'Escribe tu nombre.')
 
   const telefono = typeof cuerpo.telefono === 'string' ? cuerpo.telefono.replace(/\s+/g, '') : ''
-  if (!/^\d{10,15}$/.test(telefono)) {
-    throw new ErrorHttp(400, 'Usa solo números, de 10 a 15 dígitos.')
+  if (!TELEFONO.test(telefono)) {
+    throw new ErrorHttp(400, `Elige el código y escribe los ${DIGITOS_TELEFONO} dígitos restantes.`)
   }
 
   const email = typeof cuerpo.email === 'string' && cuerpo.email.trim() ? cuerpo.email.trim() : null

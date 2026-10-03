@@ -1,6 +1,12 @@
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
-import { limiteMs, TEXTO_CONSENTIMIENTO, type JuegoId } from '../config/juegos.ts'
+import {
+  CODIGOS_TELEFONO,
+  DIGITOS_TELEFONO,
+  limiteMs,
+  TEXTO_CONSENTIMIENTO,
+  type JuegoId,
+} from '../config/juegos.ts'
 import { ErrorApi, registrar } from '../lib/api.ts'
 import { formatearTiempo } from '../lib/texto.ts'
 
@@ -9,12 +15,12 @@ type Props = {
   onRegistrado: (jugadorId: string) => void
 }
 
-const TELEFONO = /^\d{10,15}$/
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function Registro({ juego, onRegistrado }: Props) {
   // Nunca se autocompleta: en el iPad pasa una persona tras otra.
   const [nombre, setNombre] = useState('')
+  const [codigo, setCodigo] = useState(CODIGOS_TELEFONO[0])
   const [telefono, setTelefono] = useState('')
   const [email, setEmail] = useState('')
   const [consentimiento, setConsentimiento] = useState(false)
@@ -24,7 +30,7 @@ function Registro({ juego, onRegistrado }: Props) {
 
   const errores = {
     nombre: nombre.trim() ? null : 'Escribe tu nombre.',
-    telefono: TELEFONO.test(telefono) ? null : 'Usa solo números, de 10 a 15 dígitos.',
+    telefono: telefono.length === DIGITOS_TELEFONO ? null : `Escribe los ${DIGITOS_TELEFONO} dígitos después del código.`,
     email: !email.trim() || EMAIL.test(email.trim()) ? null : 'Revisa el email o déjalo vacío.',
     consentimiento: consentimiento ? null : 'Debes aceptar para participar.',
   }
@@ -38,7 +44,7 @@ function Registro({ juego, onRegistrado }: Props) {
 
     setEnviando(true)
     try {
-      const { jugadorId } = await registrar({ nombre: nombre.trim(), telefono, email: email.trim(), consentimiento })
+      const { jugadorId } = await registrar({ nombre: nombre.trim(), telefono: codigo + telefono, email: email.trim(), consentimiento })
       onRegistrado(jugadorId)
     } catch (error) {
       setErrorServidor(
@@ -86,17 +92,30 @@ function Registro({ juego, onRegistrado }: Props) {
         </div>
         <div className="campo">
           <label htmlFor="f-tel">Teléfono *</label>
-          <input
-            id="f-tel"
-            type="tel"
-            inputMode="numeric"
-            autoComplete="off"
-            placeholder="Solo números"
-            maxLength={15}
-            value={telefono}
-            onChange={(e) => setTelefono(e.target.value.replace(/\D/g, ''))}
-            aria-invalid={!!visible('telefono')}
-          />
+          <div className="telefono">
+            <select
+              aria-label="Código de operadora"
+              value={codigo}
+              onChange={(e) => setCodigo(e.target.value)}
+            >
+              {CODIGOS_TELEFONO.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+            <input
+              id="f-tel"
+              type="tel"
+              inputMode="numeric"
+              autoComplete="off"
+              placeholder="1234567"
+              maxLength={DIGITOS_TELEFONO}
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value.replace(/\D/g, '').slice(0, DIGITOS_TELEFONO))}
+              aria-invalid={!!visible('telefono')}
+            />
+          </div>
           {visible('telefono') && <div className="campo-error">{visible('telefono')}</div>}
         </div>
         <div className="campo">

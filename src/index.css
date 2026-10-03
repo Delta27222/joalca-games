@@ -485,6 +485,32 @@ button {
   border: 2px solid var(--border);
 }
 
+.telefono {
+  display: flex;
+  gap: 8px;
+}
+
+.telefono input {
+  flex: 1;
+  min-width: 0;
+}
+
+.telefono select {
+  flex: none;
+  height: 56px;
+  padding: 0 40px 0 16px;
+  border-radius: 12px;
+  font: 700 21px var(--font-texto);
+  color: var(--text);
+  border: 2px solid var(--border);
+  outline: none;
+  appearance: none;
+  background: #ffffff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%232B1E16' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right 12px center;
+}
+
+.telefono select:focus,
 .campo input:focus {
   border-color: var(--primary);
 }

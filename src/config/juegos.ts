@@ -9,6 +9,12 @@ export const JUEGOS: readonly JuegoId[] = ['sopa', 'ahorcado']
 /** Duración del 3, 2, 1. El servidor fija el inicio de la partida al terminarla. */
 export const CUENTA_REGRESIVA_MS = 3000
 
+/** Códigos de operadora de Venezuela; el primero es el seleccionado por defecto. */
+export const CODIGOS_TELEFONO = ['0424', '0414', '0416', '0412', '0422']
+
+/** Dígitos que van después del código de operadora. */
+export const DIGITOS_TELEFONO = 7
+
 export const TEXTO_CONSENTIMIENTO =
   'Acepto participar en el sorteo y que me contacten si gano.'
 
