@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sistema visual</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap">
+<style>
+:root{--bg:#FFF8F0;--surface:#FFFFFF;--text:#2B1E16;--text-muted:#7A6A5E;--primary:#F2784B;--accent-sopa:#2F6B4F;--accent-ahorcado:#1F5C7A;--success:#3BB273;--danger:#E04F5F;--border:#EADFD3}
+body{margin:0;background:#FFF8F0}
+a{color:#C04B24}a:hover{color:#8F3517}
+</style>
+</helmet>
+<div style="width: 1180px; height: 1180px; box-sizing: border-box; padding: 40px 48px; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h1 style="margin: 0; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 44px; line-height: 1; font-weight: 800">Sistema visual</h1>
+<div style="font-size: 16px; font-weight: 700; color: var(--text-muted)">Valores provisionales hasta recibir los colores de marca</div>
+</div>
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; color: var(--text-muted)">COLOR</h2>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{swatches}}" as="sw" hint-placeholder-count="10">
+<div style="border-radius: 14px; background: #FFFFFF; box-shadow: 0 0 0 1px #EADFD3; overflow: hidden">
+<div style="height: 56px; background: {{sw.hex}}; box-shadow: inset 0 -1px 0 #EADFD3"></div>
+<div style="padding: 8px 12px">
+<div style="font-size: 14px; font-weight: 800; font-family: ui-monospace, Menlo, monospace">{{sw.token}}</div>
+<div style="font-size: 13px; color: #7A6A5E">{{sw.name}} · {{sw.hex}}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px">
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; color: var(--text-muted)">TIPOGRAFÍA</h2>
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 48px; line-height: 1; font-weight: 800">¡LO LOGRASTE!</div>
+<div style="font-size: 13px; color: #7A6A5E">Baloo 2 · títulos, letras del tablero y casillas</div>
+<div style="font-size: 20px; line-height: 1.4">Nunito Sans para texto, formularios e instrucciones.</div>
+<div style="display: flex; align-items: baseline; gap: 12px">
+<div style="font-variant-numeric: tabular-nums; font-size: 48px; font-weight: 800; line-height: 1">01:08</div>
+<div style="font-size: 13px; color: #7A6A5E">Cronómetro: Nunito Sans 800, cifras de ancho fijo</div>
+</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; color: var(--text-muted)">BOTONES</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<button type="button" style="height: 64px; border: 0; border-radius: 14px; background: #F2784B; color: #2B1E16; box-shadow: 0 4px 0 #C9532A; font: 700 22px 'Baloo 2', system-ui, sans-serif">Primario</button>
+<button type="button" style="height: 64px; border: 0; border-radius: 14px; background: #FFFFFF; color: #2B1E16; box-shadow: inset 0 0 0 2px #2B1E16; font: 700 22px 'Baloo 2', system-ui, sans-serif">Secundario</button>
+<button type="button" disabled style="height: 64px; border: 0; border-radius: 14px; background: #EDE4DA; color: #8C7D71; font: 700 22px 'Baloo 2', system-ui, sans-serif">Deshabilitado</button>
+<button type="button" style="height: 64px; border: 0; border-radius: 14px; background: #E5683B; color: #2B1E16; box-shadow: 0 0 0 #C9532A; transform: translateY(4px); font: 700 22px 'Baloo 2', system-ui, sans-serif">Presionado</button>
+</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; color: var(--text-muted)">CASILLA DE SOPA</h2>
+<div style="display: flex; gap: 20px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 48px; height: 48px; border-radius: 8px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #EADFD3; display: flex; align-items: center; justify-content: center; font: 700 26px 'Baloo 2', system-ui, sans-serif">A</div><div style="font-size: 13px; color: #7A6A5E">Normal</div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 48px; height: 48px; border-radius: 8px; background: #F2784B; box-shadow: 0 4px 10px rgba(242,120,75,0.35); display: flex; align-items: center; justify-content: center; font: 700 26px 'Baloo 2', system-ui, sans-serif">A</div><div style="font-size: 13px; color: #7A6A5E">Selección</div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 48px; height: 48px; border-radius: 8px; background: #F7E3A8; box-shadow: inset 0 0 0 2px rgba(43,30,22,0.10); display: flex; align-items: center; justify-content: center; font: 700 26px 'Baloo 2', system-ui, sans-serif">A</div><div style="font-size: 13px; color: #7A6A5E">Encontrada</div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 48px; height: 48px; border-radius: 8px; background: #FBE1E4; color: #9E2A38; box-shadow: inset 0 0 0 2px #E04F5F; display: flex; align-items: center; justify-content: center; font: 700 26px 'Baloo 2', system-ui, sans-serif">A</div><div style="font-size: 13px; color: #7A6A5E">Faltante</div></div>
+</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; color: var(--text-muted)">CASILLA DE LETRA · AHORCADO</h2>
+<div style="display: flex; gap: 20px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 52px; height: 64px; box-sizing: border-box; border-radius: 8px; background: #FFFFFF; border: 2px solid #EADFD3"></div><div style="font-size: 13px; color: #7A6A5E">Vacía</div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 52px; height: 64px; box-sizing: border-box; border-radius: 8px; background: #E3EEF3; color: #1F5C7A; border: 2px solid #B9D3DF; display: flex; align-items: center; justify-content: center; font: 700 34px 'Baloo 2', system-ui, sans-serif">D</div><div style="font-size: 13px; color: #7A6A5E">Pista</div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 52px; height: 64px; box-sizing: border-box; border-radius: 8px; background: #DDF3E6; color: #1E6B43; border: 2px solid #3BB273; display: flex; align-items: center; justify-content: center; font: 700 34px 'Baloo 2', system-ui, sans-serif">Ó</div><div style="font-size: 13px; color: #7A6A5E">Acertada</div></div>
+</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; color: var(--text-muted)">TECLA</h2>
+<div style="display: flex; gap: 20px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><button type="button" style="width: 58px; height: 58px; box-sizing: border-box; border-radius: 10px; background: #FFFFFF; color: #2B1E16; border: 2px solid #EADFD3; box-shadow: 0 3px 0 #EADFD3; font: 700 26px 'Baloo 2', system-ui, sans-serif; padding: 0">S</button><div style="font-size: 13px; color: #7A6A5E">Disponible</div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><button type="button" style="width: 58px; height: 58px; box-sizing: border-box; border-radius: 10px; background: #DDF3E6; color: #1E6B43; border: 2px solid #3BB273; font: 700 26px 'Baloo 2', system-ui, sans-serif; padding: 0">A</button><div style="font-size: 13px; color: #7A6A5E">Acierto</div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><button type="button" style="width: 58px; height: 58px; box-sizing: border-box; border-radius: 10px; background: #FBE1E4; color: #9E2A38; border: 2px solid #F3B7BE; text-decoration: line-through; font: 700 26px 'Baloo 2', system-ui, sans-serif; padding: 0">T</button><div style="font-size: 13px; color: #7A6A5E">Error</div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><button type="button" disabled style="width: 58px; height: 58px; box-sizing: border-box; border-radius: 10px; background: #EDE4DA; color: #7A6A5E; border: 2px solid #EDE4DA; font: 700 26px 'Baloo 2', system-ui, sans-serif; padding: 0">H</button><div style="font-size: 13px; color: #7A6A5E">Usada / pista</div></div>
+</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; color: var(--text-muted)">CRONÓMETRO</h2>
+<div style="display: flex; gap: 12px">
+<div style="flex: 1; border-radius: 16px; padding: 12px 18px; background: #FFFFFF; box-shadow: 0 2px 0 #EADFD3; display: flex; align-items: center; justify-content: space-between"><span style="font-size: 13px; font-weight: 800; letter-spacing: 0.12em">TIEMPO</span><span style="font-variant-numeric: tabular-nums; font-size: 40px; font-weight: 800; line-height: 1">01:00</span></div>
+<div style="flex: 1; border-radius: 16px; padding: 12px 18px; background: #E04F5F; color: #FFFFFF; display: flex; align-items: center; justify-content: space-between"><span style="font-size: 13px; font-weight: 800; letter-spacing: 0.12em">TIEMPO</span><span style="font-variant-numeric: tabular-nums; font-size: 40px; font-weight: 800; line-height: 1">00:07</span></div>
+</div>
+<div style="font-size: 13px; color: #7A6A5E">Alerta en los últimos 10 s: --danger con pulso (sin pulso si el sistema pide reducir movimiento)</div>
+</section>
+<section style="display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; color: var(--text-muted)">FILA DE RANKING</h2>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="height: 52px; display: flex; align-items: center; gap: 16px; padding: 0 16px; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #EADFD3"><div style="width: 40px; height: 40px; border-radius: 50%; background: #F7C548; display: flex; align-items: center; justify-content: center; font: 800 20px 'Baloo 2', system-ui, sans-serif">1</div><div style="flex: 1; font-size: 19px; font-weight: 700">Top 3 con medalla</div><div style="font-variant-numeric: tabular-nums; font-size: 22px; font-weight: 800">00:58</div></div>
+<div style="height: 52px; display: flex; align-items: center; gap: 16px; padding: 0 16px; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px #EADFD3"><div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font: 800 20px 'Baloo 2', system-ui, sans-serif">5</div><div style="flex: 1; font-size: 19px; font-weight: 700">Normal</div><div style="font-variant-numeric: tabular-nums; font-size: 22px; font-weight: 800">01:15</div></div>
+<div style="height: 52px; display: flex; align-items: center; gap: 16px; padding: 0 16px; border-radius: 12px; background: #FFF1E9; box-shadow: inset 0 0 0 3px #F2784B"><div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font: 800 20px 'Baloo 2', system-ui, sans-serif">4</div><div style="flex: 1; font-size: 19px; font-weight: 700">Jugador actual</div><div style="height: 28px; padding: 0 10px; border-radius: 999px; background: #F2784B; font-size: 14px; font-weight: 800; display: flex; align-items: center">Tú</div><div style="font-variant-numeric: tabular-nums; font-size: 22px; font-weight: 800">01:12</div></div>
+</div>
+</section>
+</div>
+<div style="font-size: 14px; color: #7A6A5E">Espaciado en múltiplos de 8 px · radios 12 px (tarjetas) y 8 px (casillas) · objetivos táctiles ≥ 44 px · animaciones de 150–300 ms para feedback.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1180,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      swatches: [
+        { token: '--bg', name: 'Crema', hex: '#FFF8F0' },
+        { token: '--surface', name: 'Blanco', hex: '#FFFFFF' },
+        { token: '--text', name: 'Marrón oscuro', hex: '#2B1E16' },
+        { token: '--text-muted', name: 'Texto secundario', hex: '#7A6A5E' },
+        { token: '--primary', name: 'Naranja salmón', hex: '#F2784B' },
+        { token: '--accent-sopa', name: 'Verde bosque', hex: '#2F6B4F' },
+        { token: '--accent-ahorcado', name: 'Azul petróleo', hex: '#1F5C7A' },
+        { token: '--success', name: 'Verde menta', hex: '#3BB273' },
+        { token: '--danger', name: 'Rojo coral', hex: '#E04F5F' },
+        { token: '--border', name: 'Bordes', hex: '#EADFD3' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

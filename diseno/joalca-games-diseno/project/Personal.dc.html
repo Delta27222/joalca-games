@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Página personal</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap">
+<style>
+:root{--bg:#FFF8F0;--surface:#FFFFFF;--text:#2B1E16;--text-muted:#7A6A5E;--primary:#F2784B;--accent-sopa:#2F6B4F;--accent-ahorcado:#1F5C7A;--success:#3BB273;--danger:#E04F5F;--border:#EADFD3}
+body{margin:0;background:#FFF8F0}
+a{color:#C04B24}a:hover{color:#8F3517}
+@keyframes vivo{0%,100%{opacity:1}50%{opacity:0.3}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', system-ui, sans-serif; display: flex; flex-direction: column; padding: 56px 20px 32px; gap: 16px">
+<sc-for list="{{confetti}}" as="c" hint-placeholder-count="18">
+<div style="position: absolute; border-radius: 2px; left: {{c.x}}px; top: {{c.y}}px; width: {{c.w}}px; height: {{c.h}}px; background: {{c.color}}; transform: rotate({{c.r}}deg)"></div>
+</sc-for>
+<div style="position: relative; font-size: 13px; font-weight: 800; letter-spacing: 0.18em; color: var(--text-muted); text-align: center">JOALCA GAMES</div>
+<sc-if value="{{valid}}" hint-placeholder-val="{{true}}">
+<div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding-top: 12px">
+<div style="width: 88px; height: 88px; border-radius: 50%; background: #F2784B; display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 44px; font-weight: 800">M</div>
+<h1 style="margin: 0; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 36px; line-height: 1.05; font-weight: 800">¡Hola, María!</h1>
+<div style="display: flex; align-items: center; gap: 10px; border-radius: 14px; padding: 12px 16px; background: #E6F0EA; color: #1F4D38; font-size: 17px; font-weight: 800">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v9H4v-9"></path><path d="M2 7h20v5H2z"></path><path d="M12 21V7"></path><path d="M12 7H8a2.5 2.5 0 1 1 0-5c3 0 4 5 4 5Z"></path><path d="M12 7h4a2.5 2.5 0 1 0 0-5c-3 0-4 5-4 5Z"></path></svg>
+<span>Ya estás participando en el sorteo</span>
+</div>
+</div>
+<div style="position: relative; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: #7A6A5E; padding-top: 8px">
+<span style="width: 10px; height: 10px; border-radius: 50%; background: #3BB273; animation: vivo 1.6s ease-in-out infinite"></span>
+<span>Tu posición en vivo</span>
+</div>
+<div style="position: relative; border-radius: 20px; background: #FFFFFF; box-shadow: 0 2px 0 #EADFD3; overflow: hidden">
+<div style="height: 8px; background: #2F6B4F"></div>
+<div style="padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 12px; font-weight: 800; letter-spacing: 0.12em; color: #2F6B4F">TASTE OF THE WILD</div>
+<div style="font-size: 18px; font-weight: 800">Sopa de letras</div>
+<div style="font-size: 15px; color: #7A6A5E">{{sopaSub}}</div>
+</div>
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 40px; font-weight: 800; line-height: 1; color: {{sopaPosColor}}">{{sopaPos}}</div>
+</div>
+</div>
+<div style="position: relative; border-radius: 20px; background: #FFFFFF; box-shadow: 0 2px 0 #EADFD3; overflow: hidden">
+<div style="height: 8px; background: #1F5C7A"></div>
+<div style="padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 12px; font-weight: 800; letter-spacing: 0.12em; color: #1F5C7A">DIAMOND CARE</div>
+<div style="font-size: 18px; font-weight: 800">Descubre la palabra</div>
+<div style="font-size: 15px; color: #7A6A5E">Sin posición: aún no lo has completado</div>
+</div>
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 40px; font-weight: 800; line-height: 1; color: #B9AFA6">—</div>
+</div>
+</div>
+<p style="position: relative; margin: auto 0 0; font-size: 14px; line-height: 1.45; color: #7A6A5E; text-align: center">Esta página se actualiza sola. Guárdala para revisar tu puesto durante el evento.</p>
+</sc-if>
+<sc-if value="{{invalid}}" hint-placeholder-val="{{false}}">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 0 12px">
+<dc-import name="Perrito" errors="{{3}}" size="{{180}}" hint-size="180px,180px"></dc-import>
+<h1 style="margin: 0; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 30px; line-height: 1.1; font-weight: 800">No encontramos este jugador</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.45; color: #7A6A5E">Revisa que escaneaste el código correcto o pide ayuda en el stand.</p>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["ganador","participante","id invalido"],"default":"ganador"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const estado = this.props.estado ?? 'ganador';
+    const winner = estado === 'ganador';
+    let s = 777;
+    const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    const palette = ['#F2784B', '#F7C548', '#3BB273', '#1F5C7A', '#F5D0E3'];
+    const confetti = [];
+    for (let i = 0; i < 18; i++) {
+      confetti.push({ x: Math.round(rnd() * 370), y: Math.round(rnd() * 190), w: 7 + Math.round(rnd() * 5), h: 12 + Math.round(rnd() * 8), r: Math.round(rnd() * 180), color: palette[i % palette.length] });
+    }
+    return {
+      valid: estado !== 'id invalido',
+      invalid: estado === 'id invalido',
+      confetti: estado === 'id invalido' ? [] : confetti,
+      sopaPos: winner ? '#4' : '—',
+      sopaPosColor: winner ? '#2B1E16' : '#B9AFA6',
+      sopaSub: winner ? 'Tu mejor tiempo: 01:12' : 'Sin posición: aún no lo has completado'
+    };
+  }
+}
+</script>
+</body>
+</html>

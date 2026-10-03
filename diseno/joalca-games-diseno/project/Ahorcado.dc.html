@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Descubre la palabra · juego</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap">
+<style>
+:root{--bg:#FFF8F0;--surface:#FFFFFF;--text:#2B1E16;--text-muted:#7A6A5E;--primary:#F2784B;--accent-sopa:#2F6B4F;--accent-ahorcado:#1F5C7A;--success:#3BB273;--danger:#E04F5F;--border:#EADFD3}
+body{margin:0;background:#FFF8F0}
+a{color:#C04B24}a:hover{color:#8F3517}
+@keyframes pulso{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden; user-select: none">
+<header style="height: 112px; flex: none; box-sizing: border-box; padding: 0 32px; background: var(--accent-ahorcado); color: #FFFFFF; display: flex; align-items: center; gap: 24px">
+<div style="width: 132px; height: 56px; flex: none; border: 2px dashed rgba(255,255,255,0.6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; letter-spacing: 0.1em">LOGO</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: center; gap: 12px">
+<div style="font-size: 14px; font-weight: 800; letter-spacing: 0.14em">DIAMOND CARE</div>
+<div style="height: 28px; padding: 0 12px; border-radius: 999px; background: #FFFFFF; color: var(--accent-ahorcado); font-size: 14px; font-weight: 800; display: flex; align-items: center">Sensitive Skin</div>
+</div>
+<h1 style="margin: 0; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 32px; line-height: 1.1; font-weight: 700">Descubre la palabra</h1>
+<div style="font-size: 18px; font-weight: 600; opacity: 0.92">Pista: Una única fuente de proteína de bajo peso molecular</div>
+</div>
+</header>
+<main style="flex: 1; min-height: 0; box-sizing: border-box; padding: 28px 32px; display: flex; gap: 32px">
+<div style="width: 400px; flex: none; border-radius: 24px; background: #E3EEF3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px">
+<dc-import name="Perrito" errors="{{errors}}" size="{{340}}" hint-size="340px,340px"></dc-import>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+<div style="font-size: 16px; font-weight: 800; letter-spacing: 0.12em; color: var(--accent-ahorcado)">ERRORES {{errors}}/5</div>
+<div style="display: flex; gap: 10px">
+<sc-for list="{{bones}}" as="b" hint-placeholder-count="5">
+<div style="width: 52px; height: 36px; border-radius: 10px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; opacity: {{b.op}}">
+<svg width="36" height="20" viewBox="0 0 36 20" aria-hidden="true"><path d="M9 4.5a4 4 0 1 0-3.5 6 4 4 0 1 0 3.5 6c1.5-1.5 2.5-2 4-2h10c1.5 0 2.5.5 4 2a4 4 0 1 0 3.5-6 4 4 0 1 0-3.5-6c-1.5 1.5-2.5 2-4 2H13c-1.5 0-2.5-.5-4-2Z" fill="{{b.fill}}"></path></svg>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; align-items: center; justify-content: space-between; border-radius: 20px; padding: 14px 24px; {{timerBox}}">
+<div style="font-size: 16px; font-weight: 800; letter-spacing: 0.12em">TIEMPO</div>
+<div style="font-variant-numeric: tabular-nums; font-size: 56px; line-height: 1; font-weight: 800; {{timerAnim}}">{{time}}</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+<div style="display: flex; gap: 6px">
+<sc-for list="{{w1}}" as="l" hint-placeholder-count="11">
+<div style="width: 52px; height: 64px; box-sizing: border-box; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 34px; font-weight: 700; line-height: 1; background: {{l.bg}}; color: {{l.fg}}; border: {{l.border}}">{{l.ch}}</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 32px">
+<div style="display: flex; gap: 6px">
+<sc-for list="{{w2}}" as="l" hint-placeholder-count="2">
+<div style="width: 52px; height: 64px; box-sizing: border-box; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 34px; font-weight: 700; line-height: 1; background: {{l.bg}}; color: {{l.fg}}; border: {{l.border}}">{{l.ch}}</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 6px">
+<sc-for list="{{w3}}" as="l" hint-placeholder-count="6">
+<div style="width: 52px; height: 64px; box-sizing: border-box; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 34px; font-weight: 700; line-height: 1; background: {{l.bg}}; color: {{l.fg}}; border: {{l.border}}">{{l.ch}}</div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{rows}}" as="row" hint-placeholder-count="3">
+<div style="display: flex; gap: 8px; justify-content: flex-start">
+<sc-for list="{{row.keys}}" as="k" hint-placeholder-count="10">
+<button type="button" aria-label="Letra {{k.ch}}" style="width: 58px; height: 58px; box-sizing: border-box; border-radius: 10px; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 26px; font-weight: 700; line-height: 1; padding: 0; cursor: pointer; background: {{k.bg}}; color: {{k.fg}}; border: {{k.border}}; text-decoration: {{k.deco}}; box-shadow: {{k.shadow}}">{{k.ch}}</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"errors":{"editor":"int","min":0,"max":5,"default":2},"alerta":{"editor":"boolean","default":false},"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const errors = Math.max(0, Math.min(5, Number(this.props.errors ?? 2)));
+    const alert = !!this.props.alerta;
+    const hint = ['H', 'D', 'L'];
+    const correct = ['A', 'O'];
+    const wrong = ['T', 'U', 'B', 'P', 'C'].slice(0, errors);
+    const base = (ch) => (ch === 'Ó' ? 'O' : ch);
+    const box = (ch) => {
+      const b = base(ch);
+      if (hint.includes(b)) return { ch, bg: '#E3EEF3', fg: '#1F5C7A', border: '2px solid #B9D3DF' };
+      if (correct.includes(b)) return { ch, bg: '#DDF3E6', fg: '#1E6B43', border: '2px solid #3BB273' };
+      return { ch: '', bg: '#FFFFFF', fg: '#2B1E16', border: '2px solid #EADFD3' };
+    };
+    const key = (ch) => {
+      if (hint.includes(ch)) return { ch, bg: '#EDE4DA', fg: '#7A6A5E', border: '2px solid #EDE4DA', deco: 'none', shadow: 'none' };
+      if (correct.includes(ch)) return { ch, bg: '#DDF3E6', fg: '#1E6B43', border: '2px solid #3BB273', deco: 'none', shadow: 'none' };
+      if (wrong.includes(ch)) return { ch, bg: '#FBE1E4', fg: '#9E2A38', border: '2px solid #F3B7BE', deco: 'line-through', shadow: 'none' };
+      return { ch, bg: '#FFFFFF', fg: '#2B1E16', border: '2px solid #EADFD3', deco: 'none', shadow: '0 3px 0 #EADFD3' };
+    };
+    const bones = [0, 1, 2, 3, 4].map((i) => ({ op: i < errors ? 0.35 : 1, fill: i < errors ? '#B9AFA6' : '#F2784B' }));
+    return {
+      errors,
+      bones,
+      w1: 'HIDROLIZADO'.split('').map(box),
+      w2: 'DE'.split('').map(box),
+      w3: 'SALMÓN'.split('').map(box),
+      rows: ['QWERTYUIOP', 'ASDFGHJKLÑ', 'ZXCVBNM'].map((r) => ({ keys: r.split('').map(key) })),
+      time: alert ? '00:07' : '00:41',
+      timerBox: alert ? 'background: #E04F5F; color: #FFFFFF' : 'background: #FFFFFF; color: #2B1E16; box-shadow: 0 2px 0 #EADFD3',
+      timerAnim: alert ? 'animation: pulso 1s ease-in-out infinite' : 'animation: none'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Registro</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap">
+<style>
+:root{--bg:#FFF8F0;--surface:#FFFFFF;--text:#2B1E16;--text-muted:#7A6A5E;--primary:#F2784B;--accent-sopa:#2F6B4F;--accent-ahorcado:#1F5C7A;--success:#3BB273;--danger:#E04F5F;--border:#EADFD3}
+body{margin:0;background:#FFF8F0}
+a{color:#C04B24}a:hover{color:#8F3517}
+@keyframes gira{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+<header style="height: 92px; flex: none; box-sizing: border-box; padding: 0 32px; color: #FFFFFF; display: flex; align-items: center; gap: 24px; background: {{accent}}">
+<div style="width: 132px; height: 56px; flex: none; border: 2px dashed rgba(255,255,255,0.6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; letter-spacing: 0.1em">LOGO</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 14px; font-weight: 800; letter-spacing: 0.14em">{{brand}}</div>
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 32px; line-height: 1.1; font-weight: 700">{{game}}</div>
+</div>
+</header>
+<main style="flex: 1; min-height: 0; box-sizing: border-box; padding: 40px 56px; display: flex; gap: 56px; align-items: center">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 20px">
+<a href="Main.dc.html" style="align-self: flex-start; height: 48px; padding: 0 18px 0 12px; border-radius: 999px; background: var(--surface); color: var(--text); box-shadow: inset 0 0 0 2px #EADFD3; display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 17px; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+<span>Inicio</span>
+</a>
+<h1 style="margin: 0; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 56px; line-height: 1.05; font-weight: 800">Regístrate y juega</h1>
+<p style="margin: 0; font-size: 22px; line-height: 1.4; color: var(--text-muted); max-width: 400px">Al terminar entras al sorteo, ganes o pierdas.</p>
+<div style="align-self: flex-start; height: 44px; padding: 0 18px; border-radius: 999px; display: flex; align-items: center; font-size: 18px; font-weight: 800; background: {{chipBg}}; color: {{accent}}">Tienes {{dur}}</div>
+</div>
+<form style="width: 560px; flex: none; box-sizing: border-box; padding: 32px; border-radius: 24px; background: var(--surface); box-shadow: 0 2px 0 #EADFD3, 0 18px 40px rgba(43,30,22,0.08); display: flex; flex-direction: column; gap: 18px">
+<sc-if value="{{netError}}" hint-placeholder-val="{{false}}">
+<div role="alert" style="border-radius: 12px; padding: 12px 16px; background: #FBE1E4; color: #9E2A38; font-size: 17px; font-weight: 700; line-height: 1.35">No pudimos guardar tus datos. Revisa la conexión y toca “Continuar” otra vez.</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-nombre" style="font-size: 17px; font-weight: 800">Nombre *</label>
+<input id="f-nombre" type="text" autocomplete="off" placeholder="Tu nombre" value="{{nombre}}" onChange="{{noop}}" style="height: 56px; box-sizing: border-box; padding: 0 16px; border-radius: 12px; font: 600 21px 'Nunito Sans', system-ui, sans-serif; color: #2B1E16; background: #FFFFFF; outline: none; border: {{nombreBorder}}">
+<sc-if value="{{showErrors}}" hint-placeholder-val="{{false}}">
+<div style="font-size: 15px; font-weight: 700; color: #B3303F">Escribe tu nombre.</div>
+</sc-if>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-tel" style="font-size: 17px; font-weight: 800">Teléfono *</label>
+<input id="f-tel" type="tel" inputmode="numeric" autocomplete="off" placeholder="Solo números" value="{{tel}}" onChange="{{noop}}" style="height: 56px; box-sizing: border-box; padding: 0 16px; border-radius: 12px; font: 600 21px 'Nunito Sans', system-ui, sans-serif; color: #2B1E16; background: #FFFFFF; outline: none; border: {{telBorder}}">
+<sc-if value="{{showErrors}}" hint-placeholder-val="{{false}}">
+<div style="font-size: 15px; font-weight: 700; color: #B3303F">Usa solo números, de 10 a 15 dígitos.</div>
+</sc-if>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="f-email" style="font-size: 17px; font-weight: 800">Email <span style="font-weight: 600; color: #7A6A5E">(opcional)</span></label>
+<input id="f-email" type="email" autocomplete="off" placeholder="nombre@correo.com" value="" onChange="{{noop}}" style="height: 56px; box-sizing: border-box; padding: 0 16px; border-radius: 12px; font: 600 21px 'Nunito Sans', system-ui, sans-serif; color: #2B1E16; background: #FFFFFF; outline: none; border: 2px solid #EADFD3">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label style="display: flex; gap: 12px; align-items: flex-start; font-size: 16px; line-height: 1.4; color: #2B1E16; cursor: pointer">
+<input type="checkbox" checked="{{consent}}" onChange="{{noop}}" style="width: 28px; height: 28px; margin: 0; flex: none; accent-color: #F2784B">
+<span>Acepto participar en el sorteo y que me contacten si gano. [Texto de consentimiento configurable] *</span>
+</label>
+<sc-if value="{{showErrors}}" hint-placeholder-val="{{false}}">
+<div style="font-size: 15px; font-weight: 700; color: #B3303F; padding-left: 40px">Debes aceptar para participar.</div>
+</sc-if>
+</div>
+<a href="Instrucciones.dc.html" style="height: 68px; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 12px; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 26px; font-weight: 700; text-decoration: none; background: {{btnBg}}; color: {{btnFg}}; box-shadow: {{btnShadow}}">
+<sc-if value="{{sending}}" hint-placeholder-val="{{false}}">
+<span style="width: 24px; height: 24px; border-radius: 50%; border: 3px solid rgba(43,30,22,0.25); border-top-color: #2B1E16; animation: gira 0.8s linear infinite"></span>
+</sc-if>
+<span>{{btnText}}</span>
+</a>
+</form>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"juego":{"editor":"enum","options":["sopa","ahorcado"],"default":"sopa"},"estado":{"editor":"enum","options":["vacio","errores","enviando","error de red"],"default":"vacio"},"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const sopa = (this.props.juego ?? 'sopa') === 'sopa';
+    const estado = this.props.estado ?? 'vacio';
+    const filled = estado === 'enviando' || estado === 'error de red';
+    const errs = estado === 'errores';
+    const ok = '2px solid #EADFD3', bad = '2px solid #E04F5F';
+    return {
+      noop: () => {},
+      accent: sopa ? '#2F6B4F' : '#1F5C7A',
+      chipBg: sopa ? '#E6F0EA' : '#E3EEF3',
+      brand: sopa ? 'TASTE OF THE WILD' : 'DIAMOND CARE · SENSITIVE SKIN',
+      game: sopa ? 'Encuentra los beneficios' : 'Descubre la palabra',
+      dur: sopa ? '2:00' : '1:00',
+      nombre: filled ? 'María González' : '',
+      tel: filled ? '04121234567' : (errs ? '04121234' : ''),
+      consent: filled,
+      showErrors: errs,
+      netError: estado === 'error de red',
+      nombreBorder: errs ? bad : ok,
+      telBorder: errs ? bad : ok,
+      sending: estado === 'enviando',
+      btnText: estado === 'enviando' ? 'Enviando…' : 'Continuar',
+      btnBg: estado === 'enviando' ? '#F7B79E' : '#F2784B',
+      btnFg: '#2B1E16',
+      btnShadow: estado === 'enviando' ? 'none' : '0 4px 0 #C9532A'
+    };
+  }
+}
+</script>
+</body>
+</html>
