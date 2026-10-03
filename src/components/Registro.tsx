@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type FormEvent, type KeyboardEvent } from 'react'
 import { Link } from 'react-router'
 import {
   CODIGOS_TELEFONO,
@@ -9,6 +9,7 @@ import {
 } from '../config/juegos.ts'
 import { ErrorApi, registrar } from '../lib/api.ts'
 import { formatearTiempo } from '../lib/texto.ts'
+import { llevarALaVista, useAltoTeclado } from '../lib/useTeclado.ts'
 
 type Props = {
   juego: JuegoId
@@ -27,6 +28,7 @@ function Registro({ juego, onRegistrado }: Props) {
   const [intentado, setIntentado] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [errorServidor, setErrorServidor] = useState<string | null>(null)
+  const altoTeclado = useAltoTeclado()
 
   const errores = {
     nombre: nombre.trim() ? null : 'Escribe tu nombre.',
@@ -56,8 +58,24 @@ function Registro({ juego, onRegistrado }: Props) {
     }
   }
 
+  // Intro en el teclado pasa al siguiente campo, para no tener que tocar uno
+  // que quedó tapado. En el email (el último) cierra el teclado.
+  function siguienteCampo(evento: KeyboardEvent<HTMLFormElement>) {
+    const actual = evento.target
+    if (evento.key !== 'Enter' || !(actual instanceof HTMLInputElement) || actual.type === 'checkbox') return
+    evento.preventDefault()
+    const orden = ['f-nombre', 'f-tel', 'f-email']
+    const siguiente = orden[orden.indexOf(actual.id) + 1]
+    if (siguiente) document.getElementById(siguiente)?.focus()
+    else actual.blur()
+  }
+
   return (
-    <main className="registro">
+    <main
+      className={`registro${altoTeclado ? ' con-teclado' : ''}`}
+      // Espacio bajo el formulario para poder desplazarlo por encima del teclado.
+      style={altoTeclado ? { paddingBottom: altoTeclado + 24 } : undefined}
+    >
       <div className="registro-intro">
         <Link to="/" className="btn-pildora">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -70,7 +88,14 @@ function Registro({ juego, onRegistrado }: Props) {
         <div className="chip">Tienes {formatearTiempo(limiteMs(juego)).replace(/^0/, '')}</div>
       </div>
 
-      <form className="formulario" onSubmit={enviar} noValidate>
+      <form
+        className="formulario"
+        onSubmit={enviar}
+        onKeyDown={siguienteCampo}
+        // Espera a que el teclado termine de abrirse antes de mover el campo.
+        onFocus={() => setTimeout(llevarALaVista, 350)}
+        noValidate
+      >
         {errorServidor && (
           <div role="alert" className="alerta">
             {errorServidor}
@@ -83,6 +108,7 @@ function Registro({ juego, onRegistrado }: Props) {
             type="text"
             autoComplete="off"
             placeholder="Tu nombre"
+            enterKeyHint="next"
             maxLength={60}
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
@@ -110,6 +136,7 @@ function Registro({ juego, onRegistrado }: Props) {
               inputMode="numeric"
               autoComplete="off"
               placeholder="1234567"
+              enterKeyHint="next"
               maxLength={DIGITOS_TELEFONO}
               value={telefono}
               onChange={(e) => setTelefono(e.target.value.replace(/\D/g, '').slice(0, DIGITOS_TELEFONO))}
@@ -127,6 +154,7 @@ function Registro({ juego, onRegistrado }: Props) {
             type="email"
             autoComplete="off"
             placeholder="nombre@correo.com"
+            enterKeyHint="done"
             maxLength={120}
             value={email}
             onChange={(e) => setEmail(e.target.value)}

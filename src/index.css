@@ -431,6 +431,21 @@ button {
   justify-content: center;
 }
 
+.registro.con-teclado {
+  align-items: flex-start;
+  padding-top: 16px;
+}
+
+.registro.con-teclado .formulario {
+  gap: 12px;
+}
+
+/* Lo que se desplaza con scrollIntoView no queda pegado al borde. */
+.formulario input,
+.formulario select {
+  scroll-margin: 24px;
+}
+
 .registro-intro {
   flex: 1;
   max-width: 460px;
