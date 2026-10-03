@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cuenta regresiva</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap">
+<style>
+:root{--bg:#FFF8F0;--surface:#FFFFFF;--text:#2B1E16;--text-muted:#7A6A5E;--primary:#F2784B;--accent-sopa:#2F6B4F;--accent-ahorcado:#1F5C7A;--success:#3BB273;--danger:#E04F5F;--border:#EADFD3}
+body{margin:0;background:#FFF8F0}
+a{color:#C04B24}a:hover{color:#8F3517}
+@keyframes entra{0%{transform:scale(1.6);opacity:0}30%{transform:scale(1);opacity:1}100%{transform:scale(0.92);opacity:1}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; position: relative; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+<header style="height: 92px; flex: none; box-sizing: border-box; padding: 0 32px; background: var(--accent-sopa); color: #FFFFFF; display: flex; align-items: center; gap: 24px">
+<div style="width: 132px; height: 56px; flex: none; border: 2px dashed rgba(255,255,255,0.6); border-radius: 12px"></div>
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 32px; font-weight: 700">Encuentra los beneficios de Taste Of The Wild</div>
+</header>
+<main style="flex: 1; box-sizing: border-box; padding: 32px; display: flex; gap: 32px">
+<div style="width: 672px; height: 672px; flex: none; box-sizing: border-box; padding: 13px; border-radius: 20px; background: #FFFFFF; display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{blank}}" as="b" hint-placeholder-count="169">
+<div style="height: 46px; border-radius: 8px; background: #F6EEE5"></div>
+</sc-for>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 16px">
+<div style="height: 100px; border-radius: 20px; background: #FFFFFF"></div>
+<div style="height: 96px; border-radius: 20px; background: #FFFFFF"></div>
+<div style="flex: 1; border-radius: 20px; background: #FFFFFF"></div>
+</div>
+</main>
+<div style="position: absolute; inset: 0; background: rgba(43,30,22,0.72); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px">
+<div aria-live="assertive" style="width: 320px; height: 320px; border-radius: 50%; background: #F2784B; color: #2B1E16; box-shadow: 0 0 0 18px rgba(242,120,75,0.25); display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 240px; font-weight: 800; line-height: 1; animation: entra 1s ease-out both">{{n}}</div>
+<div style="color: #FFFFFF; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 40px; font-weight: 700">¡Prepárate!</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"numero":{"editor":"enum","options":["3","2","1"],"default":"3"},"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { n: this.props.numero ?? '3', blank: new Array(169).fill(0).map((_, i) => ({ i })) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Inicio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap">
+<style>
+:root{--bg:#FFF8F0;--surface:#FFFFFF;--text:#2B1E16;--text-muted:#7A6A5E;--primary:#F2784B;--accent-sopa:#2F6B4F;--accent-ahorcado:#1F5C7A;--success:#3BB273;--danger:#E04F5F;--border:#EADFD3}
+body{margin:0;background:#FFF8F0}
+a{color:inherit;text-decoration:none}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; position: relative; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 56px 64px 48px; gap: 40px">
+<div style="position: absolute; width: 520px; height: 520px; border-radius: 50%; background: #FDE6DA; top: -260px; right: -160px"></div>
+<div style="position: absolute; width: 420px; height: 420px; border-radius: 50%; background: #E6F0EA; bottom: -240px; left: -140px"></div>
+<div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+<div style="font-size: 15px; font-weight: 800; letter-spacing: 0.18em; color: var(--text-muted)">JOALCA GAMES</div>
+<h1 style="margin: 0; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 64px; line-height: 1.05; font-weight: 800">¡Juega y entra al sorteo!</h1>
+<p style="margin: 0; font-size: 22px; color: var(--text-muted)">Elige un juego. Todos los que juegan participan, ganen o pierdan.</p>
+</div>
+<div style="position: relative; display: flex; gap: 40px">
+<a href="Registro.dc.html" aria-label="Encuentra los beneficios, Taste of the Wild, 2 minutos" style="width: 480px; height: 460px; border-radius: 24px; background: var(--surface); overflow: hidden; display: flex; flex-direction: column; transition: transform 150ms ease, box-shadow 150ms ease; {{sopaCard}}">
+<div style="height: 236px; background: var(--accent-sopa); display: flex; align-items: center; justify-content: center; position: relative">
+<div style="position: absolute; top: 16px; left: 16px; width: 104px; height: 44px; border: 2px dashed rgba(255,255,255,0.6); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 12px; font-weight: 800; letter-spacing: 0.1em">LOGO</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; transform: rotate(-4deg)">
+<sc-for list="{{tiles}}" as="t" hint-placeholder-count="24">
+<div style="width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 22px; font-weight: 700; background: {{t.bg}}; color: {{t.fg}}">{{t.ch}}</div>
+</sc-for>
+</div>
+</div>
+<div style="flex: 1; padding: 24px 28px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 14px; font-weight: 800; letter-spacing: 0.14em; color: var(--accent-sopa)">TASTE OF THE WILD</div>
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 36px; line-height: 1.1; font-weight: 700">Encuentra los beneficios</div>
+<div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 999px; background: #E6F0EA; color: var(--accent-sopa); font-weight: 800; font-size: 17px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2"></path><path d="M10 2h4"></path></svg>
+<span>2 minutos</span>
+</div>
+<div style="width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: var(--text); display: flex; align-items: center; justify-content: center">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+</div>
+</div>
+</div>
+</a>
+<a href="Registro.dc.html" aria-label="Descubre la palabra, Diamond Care, 1 minuto" style="width: 480px; height: 460px; border-radius: 24px; background: var(--surface); overflow: hidden; display: flex; flex-direction: column; transition: transform 150ms ease, box-shadow 150ms ease; {{ahorcadoCard}}">
+<div style="height: 236px; background: var(--accent-ahorcado); display: flex; align-items: flex-end; justify-content: center; position: relative">
+<div style="position: absolute; top: 16px; left: 16px; width: 104px; height: 44px; border: 2px dashed rgba(255,255,255,0.6); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 12px; font-weight: 800; letter-spacing: 0.1em">LOGO</div>
+<div style="position: absolute; right: 28px; top: 28px; display: flex; gap: 6px">
+<div style="width: 36px; height: 44px; border-radius: 8px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 24px; font-weight: 700; color: var(--accent-ahorcado)">D</div>
+<div style="width: 36px; height: 44px; border-radius: 8px; background: rgba(255,255,255,0.25)"></div>
+<div style="width: 36px; height: 44px; border-radius: 8px; background: rgba(255,255,255,0.25)"></div>
+</div>
+<dc-import name="Perrito" errors="{{0}}" size="{{210}}" hint-size="210px,210px"></dc-import>
+</div>
+<div style="flex: 1; padding: 24px 28px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-size: 14px; font-weight: 800; letter-spacing: 0.14em; color: var(--accent-ahorcado)">DIAMOND CARE</div>
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 36px; line-height: 1.1; font-weight: 700">Descubre la palabra</div>
+<div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 999px; background: #E3EEF3; color: var(--accent-ahorcado); font-weight: 800; font-size: 17px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2"></path><path d="M10 2h4"></path></svg>
+<span>1 minuto</span>
+</div>
+<div style="width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: var(--text); display: flex; align-items: center; justify-content: center">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"presionada":{"editor":"enum","options":["ninguna","sopa","ahorcado"],"default":"ninguna"},"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props.presionada ?? 'ninguna';
+    const normal = 'transform: none; box-shadow: 0 2px 0 #EADFD3, 0 18px 40px rgba(43,30,22,0.10)';
+    const pressed = 'transform: scale(0.97); box-shadow: 0 1px 0 #EADFD3, 0 6px 14px rgba(43,30,22,0.14)';
+    const rows = ['RAPEJT', 'OMEGAK', 'ÑDFIBU', 'SLCVOE'];
+    const tiles = [];
+    rows.forEach((row, r) => row.split('').forEach((ch, c) => {
+      const hl = r === 1 && c < 5;
+      tiles.push({ ch, bg: hl ? '#F7E3A8' : 'rgba(255,255,255,0.14)', fg: hl ? '#2B1E16' : '#FFFFFF' });
+    }));
+    return {
+      sopaCard: p === 'sopa' ? pressed : normal,
+      ahorcadoCard: p === 'ahorcado' ? pressed : normal,
+      tiles
+    };
+  }
+}
+</script>
+</body>
+</html>

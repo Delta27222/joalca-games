@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ranking</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap">
+<style>
+:root{--bg:#FFF8F0;--surface:#FFFFFF;--text:#2B1E16;--text-muted:#7A6A5E;--primary:#F2784B;--accent-sopa:#2F6B4F;--accent-ahorcado:#1F5C7A;--success:#3BB273;--danger:#E04F5F;--border:#EADFD3}
+body{margin:0;background:#FFF8F0}
+a{color:inherit;text-decoration:none}a:hover{color:inherit}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden; padding: 32px 48px; gap: 20px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 14px; font-weight: 800; letter-spacing: 0.18em; color: var(--text-muted)">JOALCA GAMES</div>
+<h1 style="margin: 0; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 52px; line-height: 1; font-weight: 800">Ranking</h1>
+</div>
+<a href="Main.dc.html" style="height: 72px; padding: 0 36px 0 28px; border-radius: 16px; background: #F2784B; color: #2B1E16; box-shadow: 0 4px 0 #C9532A; display: flex; align-items: center; gap: 12px; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 28px; font-weight: 700">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path></svg>
+<span>Inicio</span>
+</a>
+</div>
+<div role="tablist" style="display: flex; gap: 8px; padding: 6px; border-radius: 16px; background: #F1E8DE; align-self: flex-start">
+<button type="button" role="tab" aria-selected="true" style="height: 56px; padding: 0 28px; border: 0; border-radius: 12px; background: #2F6B4F; color: #FFFFFF; font: 800 20px 'Nunito Sans', system-ui, sans-serif; cursor: pointer">Sopa de letras</button>
+<button type="button" role="tab" aria-selected="false" style="height: 56px; padding: 0 28px; border: 0; border-radius: 12px; background: transparent; color: #2B1E16; font: 800 20px 'Nunito Sans', system-ui, sans-serif; cursor: pointer">Descubre la palabra</button>
+</div>
+<sc-if value="{{hasData}}" hint-placeholder-val="{{true}}">
+<div style="flex: 1; min-height: 0; border-radius: 24px; background: var(--surface); box-shadow: 0 2px 0 #EADFD3; padding: 12px 20px; display: flex; flex-direction: column">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+<div style="height: 52px; flex: none; display: flex; align-items: center; gap: 18px; padding: 0 16px; border-radius: 12px; background: {{r.bg}}; box-shadow: {{r.ring}}">
+<div style="width: 40px; height: 40px; flex: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 20px; font-weight: 800; background: {{r.medal}}; color: {{r.medalFg}}">{{r.pos}}</div>
+<div style="flex: 1; font-size: 21px; font-weight: 700">{{r.name}}</div>
+<sc-if value="{{r.me}}" hint-placeholder-val="{{false}}">
+<div style="height: 30px; padding: 0 12px; border-radius: 999px; background: #F2784B; color: #2B1E16; font-size: 15px; font-weight: 800; display: flex; align-items: center">Tú</div>
+</sc-if>
+<div style="width: 110px; text-align: right; font-variant-numeric: tabular-nums; font-size: 24px; font-weight: 800">{{r.time}}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+<div style="flex: 1; border-radius: 24px; background: var(--surface); box-shadow: 0 2px 0 #EADFD3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center">
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 36px; font-weight: 700">Todavía no hay ganadores</div>
+<div style="font-size: 20px; color: #7A6A5E">¡El primero en terminar se queda con el puesto #1!</div>
+</div>
+</sc-if>
+<sc-if value="{{loading}}" hint-placeholder-val="{{false}}">
+<div aria-busy="true" style="flex: 1; border-radius: 24px; background: var(--surface); box-shadow: 0 2px 0 #EADFD3; padding: 12px 20px; display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{skeleton}}" as="k" hint-placeholder-count="8">
+<div style="height: 52px; border-radius: 12px; background: #F6EEE5"></div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["con datos","fuera del top","vacio","cargando"],"default":"con datos"},"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const estado = this.props.estado ?? 'con datos';
+    const data = [
+      ['Valentina R.', '00:58'], ['Carlos M.', '01:03'], ['Andrea P.', '01:07'], ['María G.', '01:12'],
+      ['José L.', '01:15'], ['Daniela F.', '01:21'], ['Luis A.', '01:26'], ['Gabriela S.', '01:33'],
+      ['Miguel T.', '01:40'], ['Ana C.', '01:52']
+    ];
+    const medals = ['#F7C548', '#D9D4CE', '#E2A574'];
+    const outside = estado === 'fuera del top';
+    const rows = data.map(([name, time], i) => {
+      const me = !outside && i === 3;
+      return {
+        pos: i + 1, name, time, me,
+        medal: i < 3 ? medals[i] : 'transparent',
+        medalFg: '#2B1E16',
+        bg: me ? '#FFF1E9' : (i % 2 ? '#FFFFFF' : '#FFFBF6'),
+        ring: me ? 'inset 0 0 0 3px #F2784B' : 'none'
+      };
+    });
+    if (outside) {
+      rows.splice(9, 1);
+      rows.push({ pos: 23, name: 'María G.', time: '01:58', me: true, medal: 'transparent', medalFg: '#2B1E16', bg: '#FFF1E9', ring: 'inset 0 0 0 3px #F2784B' });
+    }
+    return {
+      rows,
+      hasData: estado === 'con datos' || outside,
+      empty: estado === 'vacio',
+      loading: estado === 'cargando',
+      skeleton: [1, 2, 3, 4, 5, 6, 7, 8]
+    };
+  }
+}
+</script>
+</body>
+</html>

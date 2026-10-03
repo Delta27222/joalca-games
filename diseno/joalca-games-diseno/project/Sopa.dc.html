@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sopa de letras · juego</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800&amp;display=swap">
+<style>
+:root{--bg:#FFF8F0;--surface:#FFFFFF;--text:#2B1E16;--text-muted:#7A6A5E;--primary:#F2784B;--accent-sopa:#2F6B4F;--accent-ahorcado:#1F5C7A;--success:#3BB273;--danger:#E04F5F;--border:#EADFD3}
+body{margin:0;background:#FFF8F0}
+a{color:#C04B24}a:hover{color:#8F3517}
+@keyframes pulso{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div style="width: 1180px; height: 820px; box-sizing: border-box; background: var(--bg); color: var(--text); font-family: 'Nunito Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden; user-select: none">
+<header style="height: 92px; flex: none; box-sizing: border-box; padding: 0 32px; background: var(--accent-sopa); color: #FFFFFF; display: flex; align-items: center; gap: 24px">
+<div style="width: 132px; height: 56px; flex: none; border: 2px dashed rgba(255,255,255,0.6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; letter-spacing: 0.1em">LOGO</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-size: 14px; font-weight: 800; letter-spacing: 0.14em">TASTE OF THE WILD</div>
+<h1 style="margin: 0; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 32px; line-height: 1.1; font-weight: 700">Encuentra los beneficios de Taste Of The Wild</h1>
+</div>
+</header>
+<main style="flex: 1; min-height: 0; box-sizing: border-box; padding: 32px 32px 24px; display: flex; gap: 32px; align-items: flex-start">
+<div style="flex: none; box-sizing: border-box; width: 672px; padding: 13px; border-radius: 20px; background: var(--surface); box-shadow: 0 2px 0 #EADFD3, 0 14px 32px rgba(43,30,22,0.08); display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{cells}}" as="cell" hint-placeholder-count="169">
+<div style="height: 46px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 24px; font-weight: 700; line-height: 1; background: {{cell.bg}}; color: {{cell.fg}}; box-shadow: {{cell.ring}}">{{cell.ch}}</div>
+</sc-for>
+</div>
+<aside style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="border-radius: 20px; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; {{timerBox}}">
+<div style="font-size: 16px; font-weight: 800; letter-spacing: 0.12em">TIEMPO</div>
+<div style="font-family: 'Nunito Sans', system-ui, sans-serif; font-variant-numeric: tabular-nums; font-size: 64px; line-height: 1; font-weight: 800; {{timerAnim}}">{{time}}</div>
+</div>
+<sc-if value="{{isLost}}" hint-placeholder-val="{{false}}">
+<div style="border-radius: 16px; padding: 14px 20px; background: #FBE1E4; color: #9E2A38; font-family: 'Baloo 2', system-ui, sans-serif; font-size: 26px; font-weight: 700; line-height: 1.2">¡Tiempo terminado! Las palabras en rojo eran las que faltaban.</div>
+</sc-if>
+<div style="border-radius: 20px; padding: 20px 24px; background: var(--surface); box-shadow: 0 2px 0 #EADFD3; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<div style="font-size: 18px; font-weight: 700">Beneficios encontrados</div>
+<div style="font-family: 'Baloo 2', system-ui, sans-serif; font-size: 32px; font-weight: 800; line-height: 1">3/10</div>
+</div>
+<div style="height: 12px; border-radius: 999px; background: #F1E8DE; overflow: hidden">
+<div style="width: 30%; height: 100%; border-radius: 999px; background: var(--accent-sopa)"></div>
+</div>
+</div>
+<div style="border-radius: 20px; padding: 20px 24px; background: var(--surface); box-shadow: 0 2px 0 #EADFD3; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px">
+<sc-for list="{{list}}" as="w" hint-placeholder-count="10">
+<div style="display: flex; align-items: center; gap: 10px; height: 40px">
+<div style="width: 16px; height: 16px; flex: none; border-radius: 50%; background: {{w.dot}}; box-shadow: inset 0 0 0 2px rgba(43,30,22,0.12)"></div>
+<div style="font-size: 19px; font-weight: 800; letter-spacing: 0.02em; text-decoration: {{w.deco}}; color: {{w.color}}">{{w.name}}</div>
+</div>
+</sc-for>
+</div>
+</aside>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["jugando","alerta","perdido"],"default":"jugando"},"$preview":{"width":1180,"height":820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const estado = this.props.estado ?? 'jugando';
+    const N = 13;
+    const words = [
+      { w: 'ANTIOXIDANTES', n: 'ANTIOXIDANTES', r: 0, c: 0, dr: 0, dc: 1 },
+      { w: 'PROBIOTICOS', n: 'PROBIÓTICOS', r: 1, c: 12, dr: 1, dc: 0 },
+      { w: 'PROTEINAS', n: 'PROTEÍNAS', r: 2, c: 1, dr: 0, dc: 1 },
+      { w: 'NUTRICION', n: 'NUTRICIÓN', r: 4, c: 2, dr: 0, dc: 1 },
+      { w: 'VITALIDAD', n: 'VITALIDAD', r: 3, c: 0, dr: 1, dc: 0 },
+      { w: 'DIGESTION', n: 'DIGESTIÓN', r: 12, c: 1, dr: 0, dc: 1 },
+      { w: 'ENERGIA', n: 'ENERGÍA', r: 5, c: 3, dr: 1, dc: 1 },
+      { w: 'OMEGA', n: 'OMEGA', r: 6, c: 2, dr: 1, dc: 0 },
+      { w: 'FIBRA', n: 'FIBRA', r: 8, c: 7, dr: 0, dc: 1 },
+      { w: 'PELAJE', n: 'PELAJE', r: 11, c: 3, dr: 0, dc: 1 }
+    ];
+    const colors = ['#F7E3A8', '#D3E6F5', '#FFD9C7', '#CDEBD8', '#E6D8F2', '#FADADD', '#D8EFEA', '#F2E0CC', '#FFE7B3', '#F5D0E3'];
+    const found = [0, 7, 8];
+    const grid = [], owner = [];
+    for (let r = 0; r < N; r++) { grid.push(new Array(N).fill(null)); owner.push(new Array(N).fill(-1)); }
+    words.forEach((w, i) => {
+      for (let k = 0; k < w.w.length; k++) {
+        const r = w.r + w.dr * k, c = w.c + w.dc * k;
+        grid[r][c] = w.w[k];
+        owner[r][c] = i;
+      }
+    });
+    const AB = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+    let s = 20261002;
+    const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    const lost = estado === 'perdido';
+    const cells = [];
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+      const ch = grid[r][c] || AB[Math.floor(rnd() * AB.length)];
+      const o = owner[r][c];
+      let bg = '#FFFFFF', fg = '#2B1E16', ring = 'inset 0 0 0 1px #EADFD3';
+      if (o >= 0 && found.includes(o)) { bg = colors[o]; ring = 'inset 0 0 0 2px rgba(43,30,22,0.10)'; }
+      else if (lost && o >= 0) { bg = '#FBE1E4'; fg = '#9E2A38'; ring = 'inset 0 0 0 2px #E04F5F'; }
+      else if (!lost && r === 4 && c >= 2 && c <= 6) { bg = '#F2784B'; ring = '0 4px 10px rgba(242,120,75,0.35)'; }
+      cells.push({ ch, bg, fg, ring });
+    }
+    const list = words.map((w, i) => {
+      const done = found.includes(i);
+      return {
+        name: w.n,
+        dot: done ? colors[i] : (lost ? '#FBE1E4' : '#FFFFFF'),
+        deco: done ? 'line-through' : 'none',
+        color: done ? '#7A6A5E' : (lost ? '#9E2A38' : '#2B1E16')
+      };
+    });
+    const alert = estado === 'alerta';
+    return {
+      cells,
+      list,
+      isLost: lost,
+      time: lost ? '00:00' : (alert ? '00:08' : '01:24'),
+      timerBox: (alert || lost) ? 'background: #E04F5F; color: #FFFFFF' : 'background: #FFFFFF; color: #2B1E16; box-shadow: 0 2px 0 #EADFD3',
+      timerAnim: alert ? 'animation: pulso 1s ease-in-out infinite' : 'animation: none'
+    };
+  }
+}
+</script>
+</body>
+</html>
