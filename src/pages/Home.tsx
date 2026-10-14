@@ -57,7 +57,7 @@ function Home() {
             <div className="tarjeta-pie">
               <div className="chip" style={{ height: 40, fontSize: 17, padding: '0 16px' }}>
                 <IconoReloj />
-                <span>1 minuto</span>
+                <span>1:30 minutos</span>
               </div>
               <Flecha />
             </div>
