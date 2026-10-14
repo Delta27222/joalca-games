@@ -7,7 +7,7 @@ import CuentaRegresiva from './CuentaRegresiva.tsx'
 import Encabezado from './Encabezado.tsx'
 import Instrucciones from './Instrucciones.tsx'
 import PantallaResultado, { type EstadoGuardado } from './PantallaResultado.tsx'
-import Registro from './Registro.tsx'
+import Registro, { type DatosRegistro } from './Registro.tsx'
 
 export type Final<D> = {
   gana: boolean
@@ -45,6 +45,7 @@ function FlujoDeJuego<D>({ juego, renderJuego, renderResultado }: Props<D>) {
   const navigate = useNavigate()
   const [fase, setFase] = useState<Fase>('registro')
   const [jugadorId, setJugadorId] = useState<string | null>(null)
+  const [datosRegistro, setDatosRegistro] = useState<DatosRegistro | null>(null)
   const [errorInicio, setErrorInicio] = useState<string | null>(null)
   const [inicio, setInicio] = useState<number | null>(null)
   const [ronda, setRonda] = useState(0)
@@ -119,8 +120,10 @@ function FlujoDeJuego<D>({ juego, renderJuego, renderResultado }: Props<D>) {
         <Encabezado juego={juego} />
         <Registro
           juego={juego}
-          onRegistrado={(id) => {
+          inicial={datosRegistro}
+          onRegistrado={(id, datos) => {
             setJugadorId(id)
+            setDatosRegistro(datos)
             setFase('instrucciones')
           }}
         />
@@ -133,7 +136,15 @@ function FlujoDeJuego<D>({ juego, renderJuego, renderResultado }: Props<D>) {
       <div className={`${clase} con-burbujas`}>
         <Burbujas />
         <Encabezado juego={juego} />
-        <Instrucciones juego={juego} error={errorInicio} onComenzar={comenzar} />
+        <Instrucciones
+          juego={juego}
+          error={errorInicio}
+          onComenzar={comenzar}
+          onVolver={() => {
+            setErrorInicio(null)
+            setFase('registro')
+          }}
+        />
       </div>
     )
   }
@@ -157,6 +168,7 @@ function FlujoDeJuego<D>({ juego, renderJuego, renderResultado }: Props<D>) {
           onOtraVez={() => {
             // Registro vacío para la siguiente persona.
             setJugadorId(null)
+            setDatosRegistro(null)
             setFinal(null)
             setFase('registro')
           }}

@@ -181,6 +181,11 @@ button {
   gap: 6px;
   font-weight: 800;
   font-size: 17px;
+  /* También se usa en <button> (Volver de las instrucciones). */
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 .girando {
@@ -686,9 +691,17 @@ button {
   padding: 32px;
 }
 
-.instrucciones-tarjeta {
+/* Botón Volver fuera de la tarjeta, alineado con su borde izquierdo. */
+.instrucciones-columna {
   width: 920px;
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.instrucciones-tarjeta {
+  width: 100%;
   padding: 48px 56px;
   border-radius: 28px;
   background: var(--surface);

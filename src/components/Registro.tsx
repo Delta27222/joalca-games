@@ -14,7 +14,20 @@ import { llevarALaVista, useAltoTeclado } from '../lib/useTeclado.ts'
 
 type Props = {
   juego: JuegoId
-  onRegistrado: (jugadorId: string) => void
+  /** Lo que ya había escrito, al volver desde las instrucciones. */
+  inicial?: DatosRegistro | null
+  onRegistrado: (jugadorId: string, datos: DatosRegistro) => void
+}
+
+/** Lo escrito en el formulario, para recuperarlo al volver atrás. */
+export type DatosRegistro = {
+  nombre: string
+  codigo: string
+  telefono: string
+  usuarioEmail: string
+  dominioEmail: string
+  otroDominio: string
+  consentimiento: boolean
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -26,16 +39,17 @@ const OTRO_DOMINIO = 'otro'
 const EN_DESARROLLO = import.meta.env.DEV
 const JUGADOR_DE_PRUEBA = { nombre: 'Prueba', telefono: '0000000' }
 
-function Registro({ juego, onRegistrado }: Props) {
-  // Nunca se autocompleta: en el iPad pasa una persona tras otra.
-  const [nombre, setNombre] = useState('')
-  const [codigo, setCodigo] = useState(CODIGOS_TELEFONO[0])
-  const [telefono, setTelefono] = useState('')
+function Registro({ juego, inicial, onRegistrado }: Props) {
+  // Nunca se autocompleta: en el iPad pasa una persona tras otra. Solo se
+  // recupera lo que esta misma persona escribió si vuelve desde las instrucciones.
+  const [nombre, setNombre] = useState(inicial?.nombre ?? '')
+  const [codigo, setCodigo] = useState(inicial?.codigo ?? CODIGOS_TELEFONO[0])
+  const [telefono, setTelefono] = useState(inicial?.telefono ?? '')
   // El email se pide en dos partes: usuario @ dominio (del selector o escrito).
-  const [usuarioEmail, setUsuarioEmail] = useState('')
-  const [dominioEmail, setDominioEmail] = useState(DOMINIOS_EMAIL[0])
-  const [otroDominio, setOtroDominio] = useState('')
-  const [consentimiento, setConsentimiento] = useState(false)
+  const [usuarioEmail, setUsuarioEmail] = useState(inicial?.usuarioEmail ?? '')
+  const [dominioEmail, setDominioEmail] = useState(inicial?.dominioEmail ?? DOMINIOS_EMAIL[0])
+  const [otroDominio, setOtroDominio] = useState(inicial?.otroDominio ?? '')
+  const [consentimiento, setConsentimiento] = useState(inicial?.consentimiento ?? false)
   const [intentado, setIntentado] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [errorServidor, setErrorServidor] = useState<string | null>(null)
@@ -70,7 +84,7 @@ function Registro({ juego, onRegistrado }: Props) {
     setEnviando(true)
     try {
       const { jugadorId } = await registrar(datos)
-      onRegistrado(jugadorId)
+      onRegistrado(jugadorId, { nombre, codigo, telefono, usuarioEmail, dominioEmail, otroDominio, consentimiento })
     } catch (error) {
       setErrorServidor(
         error instanceof ErrorApi && error.status === 400
