@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
+import Burbujas from '../components/Burbujas.tsx'
+import LogoJoalca from '../components/LogoJoalca.tsx'
 import { AHORCADO, type JuegoId } from '../config/juegos.ts'
 import { obtenerRanking, type FilaRanking } from '../lib/api.ts'
 import { formatearDuracion } from '../lib/texto.ts'
@@ -53,12 +55,11 @@ function Leaderboard() {
   }
 
   return (
-    <main className={`pantalla ranking juego-${juego}`}>
+    <main className={`pantalla ranking con-burbujas juego-${juego}`}>
+      <Burbujas />
       <div className="ranking-cabecera">
         <div>
-          <div className="etiqueta muted" style={{ letterSpacing: '0.18em' }}>
-            JOALCA GAMES
-          </div>
+          <LogoJoalca className="logo-joalca-chico" />
           <h1 className="titulo">Ranking</h1>
         </div>
         <Link to="/" className="btn btn-primario btn-inicio">

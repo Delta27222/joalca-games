@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import Cronometro from '../components/Cronometro.tsx'
 import Encabezado from '../components/Encabezado.tsx'
 import type { PropsJuego } from '../components/FlujoDeJuego.tsx'
+import fotoProductos from '../assets/taste/taste_productos.jpg'
 import { SOPA } from '../config/juegos.ts'
 import {
   buscarPalabra,
@@ -212,14 +213,15 @@ function TableroSopa({ tablero, inicio, onTerminar }: PropsJuego<DetalleSopa> & 
 
         <aside className="lateral">
           <Cronometro restanteMs={restante} bonus={avisoBonus} />
+          <img src={fotoProductos} alt="Productos Taste of the Wild" className="vitrina-productos vitrina-sopa" />
           {avisoBonus && (
             <div className="aviso-bonus" role="status">
-              ¡+{SOPA.bonus.ms / 1000} segundos! Encontraste {SOPA.bonus.palabras} beneficios
+              ¡+{SOPA.bonus.ms / 1000} segundos! Encontraste {SOPA.bonus.palabras} ingredientes
             </div>
           )}
           {clavePista && !avisoBonus && (
             <div className="aviso-pista" role="status">
-              ¡Una ayuda! Un beneficio pasa por la letra que brilla
+              ¡Una ayuda! Un ingrediente empieza en la letra que brilla
             </div>
           )}
           {terminado === 'pierde' && (
@@ -227,7 +229,7 @@ function TableroSopa({ tablero, inicio, onTerminar }: PropsJuego<DetalleSopa> & 
           )}
           <div className="panel progreso">
             <div className="progreso-fila">
-              <span>Beneficios encontrados</span>
+              <span>Ingredientes encontrados</span>
               <span className="progreso-numero">
                 {encontradas.length}/{total}
               </span>

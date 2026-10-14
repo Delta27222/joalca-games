@@ -1,6 +1,19 @@
 import { AHORCADO, limiteMs, SOPA, type JuegoId } from '../config/juegos.ts'
 import { formatearTiempo } from '../lib/texto.ts'
-import Perrito from './Perrito.tsx'
+import CarruselProductos from './CarruselProductos.tsx'
+
+/** Imágenes de una carpeta de assets, ordenadas por su número (1, 2, …, 10). */
+function imagenesEnOrden(modulos: Record<string, string>): string[] {
+  const numero = (ruta: string) => Number(ruta.match(/(\d+)\.\w+$/)?.[1])
+  return Object.keys(modulos)
+    .sort((a, b) => numero(a) - numero(b))
+    .map((ruta) => modulos[ruta])
+}
+
+const PRODUCTOS = {
+  sopa: imagenesEnOrden(import.meta.glob('../assets/taste/*.png', { eager: true, import: 'default' })),
+  ahorcado: imagenesEnOrden(import.meta.glob('../assets/diamond/[0-9]*.webp', { eager: true, import: 'default' })),
+}
 
 type Props = {
   juego: JuegoId
@@ -13,23 +26,7 @@ function Instrucciones({ juego, error, onComenzar }: Props) {
     <main className="instrucciones">
       <div className="instrucciones-tarjeta">
         <div className="instrucciones-arte">
-          {juego === 'sopa' ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center' }}>
-              <div className="demo-palabra">
-                {[...'OMEGA'].map((l) => (
-                  <div key={l}>{l}</div>
-                ))}
-              </div>
-              <svg width="200" height="44" viewBox="0 0 200 44" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--accent)' }} aria-hidden="true">
-                <path d="M20 22h150" />
-                <path d="M160 12l12 10-12 10" />
-                <circle cx="20" cy="22" r="8" fill="currentColor" />
-              </svg>
-              <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--accent)' }}>Arrastra el dedo</div>
-            </div>
-          ) : (
-            <Perrito errores={0} className="perrito-instrucciones" />
-          )}
+          <CarruselProductos imagenes={PRODUCTOS[juego]} className="carrusel-instrucciones" />
         </div>
         <div className="instrucciones-texto">
           <h1 className="titulo">¿Cómo se juega?</h1>

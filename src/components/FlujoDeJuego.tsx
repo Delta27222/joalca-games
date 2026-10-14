@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router'
 import type { JuegoId } from '../config/juegos.ts'
 import { crearPartida, ErrorApi, terminarPartida } from '../lib/api.ts'
+import Burbujas from './Burbujas.tsx'
 import CuentaRegresiva from './CuentaRegresiva.tsx'
 import Encabezado from './Encabezado.tsx'
 import Instrucciones from './Instrucciones.tsx'
@@ -113,7 +114,8 @@ function FlujoDeJuego<D>({ juego, renderJuego, renderResultado }: Props<D>) {
 
   if (fase === 'registro' || !jugadorId) {
     return (
-      <div className={clase}>
+      <div className={`${clase} con-burbujas`}>
+        <Burbujas />
         <Encabezado juego={juego} />
         <Registro
           juego={juego}
@@ -128,7 +130,8 @@ function FlujoDeJuego<D>({ juego, renderJuego, renderResultado }: Props<D>) {
 
   if (fase === 'instrucciones') {
     return (
-      <div className={clase}>
+      <div className={`${clase} con-burbujas`}>
+        <Burbujas />
         <Encabezado juego={juego} />
         <Instrucciones juego={juego} error={errorInicio} onComenzar={comenzar} />
       </div>

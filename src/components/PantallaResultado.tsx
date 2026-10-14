@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { AHORCADO, SOPA, type JuegoId } from '../config/juegos.ts'
 import { formatearDuracion } from '../lib/texto.ts'
+import Burbujas from './Burbujas.tsx'
 import CodigoQr from './CodigoQr.tsx'
 import Confeti from './Confeti.tsx'
 
@@ -31,7 +32,8 @@ function PantallaResultado(props: Props) {
   const marca = juego === 'sopa' ? `${SOPA.marca} · SOPA DE LETRAS` : `${AHORCADO.marca} · ${AHORCADO.formula.toUpperCase()}`
 
   return (
-    <div className={`resultado${gana ? '' : ' perdio'}`}>
+    <div className={`resultado con-burbujas${gana ? '' : ' perdio'}`}>
+      <Burbujas />
       {gana && <Confeti />}
       <div className="resultado-tarjeta">
         {lateral}

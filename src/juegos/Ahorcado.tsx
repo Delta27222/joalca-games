@@ -3,6 +3,7 @@ import Cronometro from '../components/Cronometro.tsx'
 import Encabezado from '../components/Encabezado.tsx'
 import type { PropsJuego } from '../components/FlujoDeJuego.tsx'
 import Perrito from '../components/Perrito.tsx'
+import fotoProductos from '../assets/diamond/diamond_care_productos.jpg'
 import { AHORCADO } from '../config/juegos.ts'
 import { elegirLetrasDePista, estaCompleta, FILAS_DEL_TECLADO, letrasDe } from '../lib/ahorcado.ts'
 import { normalizar } from '../lib/texto.ts'
@@ -99,6 +100,8 @@ function Ahorcado({ inicio, onTerminar }: PropsJuego<DetalleAhorcado>) {
               </div>
             ))}
           </div>
+
+          <img src={fotoProductos} alt="Productos Diamond Care" className="vitrina-productos" />
 
           <div className="teclado">
             {FILAS_DEL_TECLADO.map((fila) => (

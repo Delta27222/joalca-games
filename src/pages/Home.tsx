@@ -1,10 +1,11 @@
 import { Link } from 'react-router'
+import fotoDiamondCare from '../assets/diamond/diamond_tarjeta.jpg'
+import fotoTaste from '../assets/taste/taste_tarjeta.jpg'
+import Burbujas from '../components/Burbujas.tsx'
+import CreditoKoda from '../components/CreditoKoda.tsx'
 import { IconoReloj } from '../components/Instrucciones.tsx'
-import Perrito from '../components/Perrito.tsx'
+import LogoJoalca from '../components/LogoJoalca.tsx'
 import { AHORCADO, SOPA } from '../config/juegos.ts'
-
-// Mini sopa decorativa de la tarjeta, con OMEGA resaltada.
-const FILAS_DEMO = ['RAPEJT', 'OMEGAK', 'ÑDFIBU', 'SLCVOE']
 
 function Flecha() {
   return (
@@ -19,14 +20,11 @@ function Flecha() {
 
 function Home() {
   return (
-    <main className="pantalla inicio">
-      <div className="inicio-burbuja" style={{ width: 520, height: 520, background: '#FDE6DA', top: -260, right: -160 }} />
-      <div className="inicio-burbuja" style={{ width: 420, height: 420, background: '#E6F0EA', bottom: -240, left: -140 }} />
+    <main className="pantalla inicio con-burbujas">
+      <Burbujas />
 
       <div className="inicio-cabecera">
-        <div className="etiqueta muted" style={{ fontSize: 15, letterSpacing: '0.18em' }}>
-          JOALCA GAMES
-        </div>
+        <LogoJoalca />
         <h1 className="titulo">¡Juega y entra al sorteo!</h1>
         <p className="muted">Elige un juego. Todos los que juegan participan, ganen o pierdan.</p>
       </div>
@@ -34,25 +32,7 @@ function Home() {
       <nav className="inicio-tarjetas">
         <Link to="/sopa-de-letras" className="tarjeta-juego juego-sopa" aria-label={`${SOPA.nombre}, Taste of the Wild, 2 minutos`}>
           <div className="tarjeta-arte">
-            <div className="logo-hueco">LOGO</div>
-            <div className="tarjeta-letras">
-              {FILAS_DEMO.flatMap((fila, f) =>
-                [...fila].map((letra, c) => {
-                  const resaltada = f === 1 && c < 5
-                  return (
-                    <div
-                      key={`${f}-${c}`}
-                      style={{
-                        background: resaltada ? '#F7E3A8' : 'rgba(255,255,255,0.14)',
-                        color: resaltada ? 'var(--text)' : '#FFFFFF',
-                      }}
-                    >
-                      {letra}
-                    </div>
-                  )
-                }),
-              )}
-            </div>
+            <img src={fotoTaste} alt="" className="tarjeta-foto" />
           </div>
           <div className="tarjeta-cuerpo">
             <div className="etiqueta">{SOPA.marca}</div>
@@ -68,16 +48,8 @@ function Home() {
         </Link>
 
         <Link to="/ahorcado" className="tarjeta-juego juego-ahorcado" aria-label={`${AHORCADO.nombre}, Diamond Care, 1 minuto`}>
-          <div className="tarjeta-arte" style={{ alignItems: 'flex-end' }}>
-            <div className="logo-hueco">LOGO</div>
-            <div style={{ position: 'absolute', right: 28, top: 28, display: 'flex', gap: 6 }}>
-              <div className="tarjeta-letras" style={{ display: 'flex', transform: 'none' }}>
-                <div style={{ width: 36, height: 44, background: '#FFFFFF', color: 'var(--accent-ahorcado)' }}>D</div>
-                <div style={{ width: 36, height: 44, background: 'rgba(255,255,255,0.25)' }} />
-                <div style={{ width: 36, height: 44, background: 'rgba(255,255,255,0.25)' }} />
-              </div>
-            </div>
-            <Perrito errores={0} className="perrito-tarjeta" />
+          <div className="tarjeta-arte">
+            <img src={fotoDiamondCare} alt="" className="tarjeta-foto" />
           </div>
           <div className="tarjeta-cuerpo">
             <div className="etiqueta">{AHORCADO.marca}</div>
@@ -92,6 +64,8 @@ function Home() {
           </div>
         </Link>
       </nav>
+
+      <CreditoKoda />
     </main>
   )
 }

@@ -225,18 +225,16 @@ button {
   gap: 24px;
 }
 
-.logo-hueco {
-  width: 132px;
-  height: 56px;
+.logo-encabezado {
+  height: 64px;
+  max-width: 200px;
   flex: none;
-  border: 2px dashed rgba(255, 255, 255, 0.6);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
+  object-fit: contain;
+}
+
+/* El logo de Diamond Care viene en gris; se pasa a blanco para que contraste con el encabezado. */
+.logo-diamond {
+  filter: brightness(0) invert(1);
 }
 
 .encabezado-textos {
@@ -244,24 +242,6 @@ button {
   flex-direction: column;
   gap: 2px;
   min-width: 0;
-}
-
-.encabezado-marca {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.encabezado-formula {
-  height: 28px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: #ffffff;
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
 }
 
 .encabezado h1 {
@@ -280,18 +260,70 @@ button {
 /* ---------- Inicio ---------- */
 
 .inicio {
-  position: relative;
-  overflow: hidden;
+  --burbuja-abajo: #e6f0ea;
   align-items: center;
   justify-content: center;
   padding: 56px 32px 48px;
   gap: 40px;
 }
 
-.inicio-burbuja {
+/* Contenedor de <Burbujas />: las recorta y las deja detrás del contenido. */
+.con-burbujas {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.burbuja {
   position: absolute;
+  z-index: -1;
   border-radius: 50%;
   pointer-events: none;
+  animation: flota 6s ease-in-out infinite alternate;
+}
+
+/* La segunda va en sentido contrario para que no se muevan a la par. */
+.burbuja + .burbuja {
+  animation-direction: alternate-reverse;
+}
+
+@keyframes flota {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 30px) scale(1.08);
+  }
+  100% {
+    transform: translate(30px, -20px) scale(0.95);
+  }
+}
+
+/* Logo de Joalca (ver LogoJoalca.tsx): toma el color del texto. */
+.logo-joalca {
+  display: block;
+  width: 220px;
+  max-width: 100%;
+  aspect-ratio: 5;
+  background-color: var(--text);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+.logo-joalca-chico {
+  width: 150px;
+}
+
+.inicio-cabecera .logo-joalca {
+  width: 320px;
+}
+
+.personal > .logo-joalca {
+  align-self: center;
 }
 
 .inicio-cabecera {
@@ -309,6 +341,60 @@ button {
 
 .inicio-cabecera p {
   font-size: clamp(18px, 1.9vw, 22px);
+}
+
+/* Crédito de KodaTech (ver CreditoKoda.tsx): isotipo que se despliega con el nombre. */
+.credito-koda {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--sombra-tarjeta);
+  outline: none;
+}
+
+.credito-koda-isotipo {
+  display: block;
+  width: 36px;
+  height: auto;
+}
+
+.credito-koda-nombre {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-width 350ms ease,
+    margin 350ms ease,
+    opacity 250ms ease;
+}
+
+.credito-koda-by {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.credito-koda-nombre img {
+  display: block;
+  height: 24px;
+  width: auto;
+  max-width: none;
+}
+
+.credito-koda:hover .credito-koda-nombre,
+.credito-koda:focus .credito-koda-nombre {
+  max-width: 160px;
+  margin: 0 8px 0 10px;
+  opacity: 1;
 }
 
 .inicio-tarjetas {
@@ -333,15 +419,38 @@ button {
     0 2px 0 var(--border),
     0 18px 40px rgba(43, 30, 22, 0.1);
   transition:
-    transform 150ms ease,
-    box-shadow 150ms ease;
+    transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 250ms ease;
+}
+
+/* Solo con mouse: en el iPad el hover se quedaría pegado tras tocar. */
+@media (hover: hover) {
+  .tarjeta-juego:hover {
+    transform: translateY(-8px);
+    box-shadow:
+      0 2px 0 var(--border),
+      0 28px 56px rgba(43, 30, 22, 0.16);
+  }
+
+  .tarjeta-juego:hover .tarjeta-foto {
+    transform: scale(1.06);
+  }
+
+  .tarjeta-juego:hover .tarjeta-flecha {
+    transform: translateX(6px);
+  }
 }
 
 .tarjeta-juego:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+  transition-duration: 100ms;
   box-shadow:
     0 1px 0 var(--border),
     0 6px 14px rgba(43, 30, 22, 0.14);
+}
+
+.tarjeta-juego:active .tarjeta-flecha {
+  transform: translateX(10px) scale(0.9);
 }
 
 .tarjeta-arte {
@@ -354,34 +463,12 @@ button {
   justify-content: center;
 }
 
-.tarjeta-arte .logo-hueco {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  width: 104px;
-  height: 44px;
-  font-size: 12px;
-  border-radius: 10px;
-  color: #ffffff;
-}
-
-.tarjeta-letras {
-  display: grid;
-  grid-template-columns: repeat(6, 40px);
-  gap: 6px;
-  transform: rotate(-4deg);
-}
-
-.tarjeta-letras div {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-titulo);
-  font-size: 22px;
-  font-weight: 700;
+/* Foto de la marca que ocupa todo el arte de la tarjeta. */
+.tarjeta-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 400ms ease;
 }
 
 .tarjeta-cuerpo {
@@ -418,6 +505,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 200ms ease;
 }
 
 /* ---------- Registro e instrucciones ---------- */
@@ -482,6 +570,7 @@ button {
   gap: 6px;
 }
 
+
 .campo label {
   font-size: 17px;
   font-weight: 800;
@@ -500,9 +589,27 @@ button {
   border: 2px solid var(--border);
 }
 
-.telefono {
+.telefono,
+.email {
   display: flex;
   gap: 8px;
+}
+
+/* Email en dos partes: usuario @ dominio. */
+.email {
+  align-items: center;
+}
+
+.email input {
+  flex: 1;
+  min-width: 0;
+}
+
+.email-arroba {
+  flex: none;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-muted);
 }
 
 .telefono input {
@@ -510,7 +617,8 @@ button {
   min-width: 0;
 }
 
-.telefono select {
+.telefono select,
+.email select {
   flex: none;
   height: 56px;
   padding: 0 40px 0 16px;
@@ -526,6 +634,7 @@ button {
 }
 
 .telefono select:focus,
+.email select:focus,
 .campo input:focus {
   border-color: var(--primary);
 }
@@ -576,7 +685,7 @@ button {
 }
 
 .instrucciones-tarjeta {
-  width: 860px;
+  width: 920px;
   max-width: 100%;
   padding: 48px 56px;
   border-radius: 28px;
@@ -588,8 +697,8 @@ button {
 }
 
 .instrucciones-arte {
-  width: 260px;
-  height: 260px;
+  width: 360px;
+  height: 360px;
   flex: none;
   border-radius: 24px;
   background: var(--accent-bg);
@@ -612,25 +721,6 @@ button {
 .instrucciones-texto p {
   font-size: 22px;
   line-height: 1.45;
-}
-
-.demo-palabra {
-  display: flex;
-  gap: 4px;
-  padding: 6px;
-  border-radius: 14px;
-  background: #f7e3a8;
-}
-
-.demo-palabra div {
-  width: 38px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-titulo);
-  font-size: 24px;
-  font-weight: 700;
 }
 
 /* ---------- Cuenta regresiva ---------- */
@@ -799,13 +889,13 @@ button {
 /* ---------- Sopa de letras ---------- */
 
 .tablero {
-  /* Lo más grande posible sin pasar de 672 px ni hacer scroll. */
-  --lado: min(672px, calc(100dvh - 92px - 56px), calc(100vw - 64px));
+  /* Lo más grande posible sin pasar de 780 px ni hacer scroll. */
+  --lado: min(780px, calc(100dvh - 92px - 56px), calc(100vw - 64px));
   flex: none;
   width: var(--lado);
   aspect-ratio: 1;
   container-type: inline-size;
-  padding: 1.9cqw;
+  padding: 1.4cqw;
   border-radius: 20px;
   background: var(--surface);
   box-shadow:
@@ -824,7 +914,7 @@ button {
   align-items: center;
   justify-content: center;
   font-family: var(--font-titulo);
-  font-size: 3.6cqw;
+  font-size: 4.2cqw;
   font-weight: 700;
   line-height: 1;
   background: #ffffff;
@@ -1090,20 +1180,40 @@ ul.lista-palabras {
   border-color: #f3b7be;
 }
 
+/* Foto de productos en el espacio libre del juego (entre la frase y el teclado en el
+   ahorcado, bajo el contador en la sopa); el blanco de la foto se funde con el fondo. */
+.vitrina-productos {
+  width: 100%;
+  max-width: 620px;
+  max-height: 24dvh;
+  min-height: 0;
+  margin: auto;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+/* En la sopa va justo bajo el contador, sin centrarse en el espacio libre. */
+.vitrina-sopa {
+  margin: 0 auto;
+}
+
 .teclado {
-  margin-top: auto;
+  /* Las teclas se calculan a partir del ancho disponible (ver --tecla). */
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
 
 .teclado-fila {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 
 .tecla {
-  --tecla: clamp(36px, 4.9vw, 58px);
+  /* 10 teclas por fila y 9 espacios de 10 px llenan el ancho del teclado. */
+  --tecla: clamp(36px, calc((100cqw - 90px) / 10), 68px);
   width: var(--tecla);
   height: var(--tecla);
   border-radius: 10px;
@@ -1641,17 +1751,92 @@ ul.lista-palabras {
   color: #b9afa6;
 }
 
-/* Tamaños del perrito según dónde aparece. */
-.perrito-tarjeta {
-  width: 210px;
+.carrusel {
+  position: relative;
+  overflow: hidden;
 }
 
-.perrito-instrucciones {
-  width: 220px;
+.carrusel img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.carrusel img.visible {
+  opacity: 1;
+}
+
+.carrusel-instrucciones {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
 }
 
 .perrito-personal {
   width: 180px;
+}
+
+/* ---------- Pantalla de carga ---------- */
+
+/* Va encima de la app mientras carga; la página de abajo ya se está montando. */
+.carga {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--bg);
+  transition: opacity 400ms ease;
+}
+
+.carga.saliendo {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carga-contenido {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+}
+
+.perrito-carga {
+  width: 200px;
+  animation: salta 700ms ease-in-out infinite alternate;
+}
+
+@keyframes salta {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-18px);
+  }
+}
+
+.carga-marca {
+  margin-top: 12px;
+}
+
+.carga-titulo {
+  font-size: clamp(36px, 5vw, 56px);
+}
+
+.carga-barra {
+  width: min(360px, 80vw);
+  margin-top: 8px;
+}
+
+.carga-texto {
+  font-size: 18px;
+  font-weight: 700;
 }
 
 /* ---------- Errores de configuración y estados vacíos ---------- */
@@ -1703,7 +1888,7 @@ ul.lista-palabras {
 
   .instrucciones-arte {
     width: 100%;
-    height: 200px;
+    height: 300px;
   }
 
   .juego {
@@ -1714,11 +1899,15 @@ ul.lista-palabras {
   }
 
   .tablero {
-    --lado: min(672px, calc(100vw - 32px), calc(100dvh - 92px - 300px));
+    --lado: min(780px, calc(100vw - 32px), calc(100dvh - 92px - 300px));
   }
 
   .lateral {
     width: 100%;
+  }
+
+  .vitrina-productos {
+    max-height: 160px;
   }
 
   .perrito-panel {
@@ -1776,8 +1965,9 @@ ul.lista-palabras {
     gap: 12px;
   }
 
-  .encabezado .logo-hueco {
-    display: none;
+  .logo-encabezado {
+    height: 40px;
+    max-width: 120px;
   }
 
   .encabezado h1 {

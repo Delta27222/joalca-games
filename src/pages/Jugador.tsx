@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import Burbujas from '../components/Burbujas.tsx'
 import Confeti from '../components/Confeti.tsx'
+import LogoJoalca from '../components/LogoJoalca.tsx'
 import { IconoRegalo } from '../components/PantallaResultado.tsx'
 import Perrito from '../components/Perrito.tsx'
 import { AHORCADO, SOPA } from '../config/juegos.ts'
@@ -53,7 +55,8 @@ function Jugador() {
 
   if (estado.tipo === 'invalido') {
     return (
-      <main className="pantalla personal">
+      <main className="pantalla personal con-burbujas">
+        <Burbujas />
         <div className="centrado">
           <Perrito errores={3} className="perrito-personal" />
           <h1 className="titulo" style={{ fontSize: 30 }}>No encontramos este jugador</h1>
@@ -67,7 +70,8 @@ function Jugador() {
 
   if (estado.tipo === 'cargando') {
     return (
-      <main className="pantalla personal">
+      <main className="pantalla personal con-burbujas">
+        <Burbujas />
         <div className="centrado">
           <span className="girando" />
         </div>
@@ -77,11 +81,10 @@ function Jugador() {
 
   const { nombre, sopa, ahorcado } = estado.datos
   return (
-    <main className="pantalla personal">
+    <main className="pantalla personal con-burbujas">
+      <Burbujas />
       <Confeti cantidad={18} />
-      <div className="etiqueta muted" style={{ position: 'relative', fontSize: 13, letterSpacing: '0.18em', textAlign: 'center' }}>
-        JOALCA GAMES
-      </div>
+      <LogoJoalca className="logo-joalca-chico" />
       <div className="personal-saludo">
         <div className="avatar">{nombre.charAt(0).toUpperCase()}</div>
         <h1 className="titulo">¡Hola, {nombre}!</h1>

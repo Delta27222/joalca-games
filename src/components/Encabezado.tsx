@@ -1,3 +1,5 @@
+import logoDiamondCare from '../assets/diamond/diamond_care_logo.svg'
+import logoTaste from '../assets/taste/taste_logo.svg'
 import { AHORCADO, SOPA, type JuegoId } from '../config/juegos.ts'
 
 type Props = {
@@ -11,7 +13,7 @@ function Encabezado({ juego, enJuego = false, pista }: Props) {
   if (juego === 'sopa') {
     return (
       <header className="encabezado">
-        <div className="logo-hueco">LOGO</div>
+        <img src={logoTaste} alt={SOPA.marca} className="logo-encabezado" />
         <div className="encabezado-textos">
           <div className="etiqueta">{SOPA.marca}</div>
           <h1>{enJuego ? SOPA.titulo : SOPA.nombre}</h1>
@@ -22,12 +24,8 @@ function Encabezado({ juego, enJuego = false, pista }: Props) {
 
   return (
     <header className="encabezado">
-      <div className="logo-hueco">LOGO</div>
+      <img src={logoDiamondCare} alt={AHORCADO.marca} className="logo-encabezado logo-diamond" />
       <div className="encabezado-textos">
-        <div className="encabezado-marca">
-          <div className="etiqueta">{AHORCADO.marca}</div>
-          <div className="encabezado-formula">{AHORCADO.formula}</div>
-        </div>
         <h1>{AHORCADO.nombre}</h1>
         {enJuego && pista && <div className="encabezado-pista">Pista: {pista}</div>}
       </div>
