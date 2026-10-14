@@ -345,9 +345,11 @@ button {
 
 /* Crédito de KodaTech (ver CreditoKoda.tsx): isotipo que se despliega con el nombre. */
 .credito-koda {
-  position: absolute;
+  /* Fija a la ventana: siempre a la vista aunque la página tenga scroll. */
+  position: fixed;
   right: 20px;
   bottom: 20px;
+  z-index: 10;
   display: flex;
   align-items: center;
   padding: 6px;
