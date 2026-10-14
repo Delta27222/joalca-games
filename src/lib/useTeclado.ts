@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react'
 // Menos que esto es la barra de Safari moviéndose, no un teclado.
 const MINIMO_PX = 120
 
-/** Lleva el campo enfocado al centro de la parte visible de la pantalla. */
+/** Lleva el campo de texto enfocado al centro de la parte visible de la pantalla. */
 export function llevarALaVista() {
   const el = document.activeElement
-  if (el instanceof HTMLElement && el.matches('input, select, textarea')) {
+  if (el instanceof HTMLElement && el.matches('input:not([type="checkbox"]), select, textarea')) {
     el.scrollIntoView({ block: 'center', behavior: 'smooth' })
   }
 }

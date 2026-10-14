@@ -143,8 +143,12 @@ function Registro({ juego, inicial, onRegistrado }: Props) {
         className="formulario"
         onSubmit={enviar}
         onKeyDown={siguienteCampo}
-        // Espera a que el teclado termine de abrirse antes de mover el campo.
-        onFocus={() => setTimeout(llevarALaVista, 350)}
+        // Solo con el teclado en pantalla abierto (al pasar de un campo a otro en
+        // el iPad); al abrirse, ya lo mueve useAltoTeclado. En la computadora no
+        // hace falta y desplazaba la página, escondiendo la cabecera.
+        onFocus={() => {
+          if (altoTeclado) setTimeout(llevarALaVista, 350)
+        }}
         noValidate
       >
         {EN_DESARROLLO && <div className="chip">Modo desarrollo: puedes continuar sin llenar los datos.</div>}

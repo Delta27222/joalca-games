@@ -275,7 +275,11 @@ button {
 /* Contenedor de <Burbujas />: las recorta y las deja detrás del contenido. */
 .con-burbujas {
   position: relative;
+  /* clip y no hidden: con hidden, scrollIntoView (al enfocar un campo del
+     registro) desplazaba el contenedor y escondía la cabecera. hidden queda
+     solo para navegadores sin clip. */
   overflow: hidden;
+  overflow: clip;
   isolation: isolate;
 }
 
@@ -1278,8 +1282,6 @@ ul.lista-palabras {
 /* ---------- Resultado ---------- */
 
 .resultado {
-  position: relative;
-  overflow: hidden;
   min-height: 100dvh;
   padding: 32px;
   display: flex;
@@ -1664,8 +1666,6 @@ ul.lista-palabras {
 /* ---------- Página personal ---------- */
 
 .personal {
-  position: relative;
-  overflow: hidden;
   max-width: 480px;
   margin: 0 auto;
   width: 100%;
