@@ -68,11 +68,21 @@ export async function terminarPartida(
   throw ultimo
 }
 
-export type FilaRanking = { posicion: number; nombre: string; tiempoMs: number; esTu: boolean }
+export type FilaRanking = {
+  posicion: number
+  nombre: string
+  tiempoMs: number
+  esTu: boolean
+  /** false si su mejor partida no la completó. */
+  gana: boolean
+  /** Solo viene con la clave de staff. */
+  telefono?: string
+}
 
-export function obtenerRanking(juego: JuegoId, jugadorId: string | null) {
+export function obtenerRanking(juego: JuegoId, jugadorId: string | null, staff: string | null = null) {
   const params = new URLSearchParams({ juego })
   if (jugadorId) params.set('jugador', jugadorId)
+  if (staff) params.set('staff', staff)
   return pedir<{ filas: FilaRanking[] }>(`/api/ranking?${params}`)
 }
 

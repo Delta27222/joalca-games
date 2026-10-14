@@ -11,7 +11,7 @@ Los juegos corren en 3 iPads de un evento y el ranking debe ser uno solo, compar
 - El backend vive en el mismo repo como funciones de Vercel en `api/`, desplegadas junto al front.
 - Los datos se guardan en PostgreSQL (13+), con la conexión en la variable `DATABASE_URL`. El esquema está en `db/schema.sql`.
 - El **servidor mide el tiempo**: al pulsar "¡Comenzar!" se crea la partida con `inicio = now() + cuenta regresiva`, y al terminar el servidor calcula la duración. Se rechazan las victorias con duraciones imposibles: menos de 3 s, o más que el límite más una tolerancia de 5 s.
-- La API nunca devuelve el teléfono ni el email.
+- La API nunca devuelve el teléfono ni el email. Excepción posterior: con la clave `CLAVE_STAFF`, `/api/ranking` incluye el teléfono para el botón de WhatsApp del staff.
 
 ## Consecuencias
 

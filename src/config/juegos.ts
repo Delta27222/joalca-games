@@ -19,7 +19,7 @@ export const DOMINIOS_EMAIL = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo
 export const DIGITOS_TELEFONO = 7
 
 export const TEXTO_CONSENTIMIENTO =
-  'Acepto participar en el sorteo y que me contacten si gano.'
+  'Acepto participar en el sorteo, recibir mi resultado por correo y que me contacten si gano.'
 
 export const SOPA = {
   marca: 'TASTE OF THE WILD',

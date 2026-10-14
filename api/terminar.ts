@@ -1,4 +1,6 @@
+import { waitUntil } from '@vercel/functions'
 import { AHORCADO, limiteMaximoMs, type JuegoId } from '../src/config/juegos.js'
+import { enviarResultado } from './_lib/correo.js'
 import { db } from './_lib/db.js'
 import { ErrorHttp, json, leerJson, manejar, uuid } from './_lib/http.js'
 import { posicionDe } from './_lib/ranking.js'
@@ -10,6 +12,8 @@ const TOLERANCIA_MS = 5000
 
 type Partida = {
   jugador_id: string
+  nombre: string
+  email: string | null
   juego: JuegoId
   fin_at: Date | null
   transcurrido_ms: number
@@ -33,10 +37,11 @@ export const POST = manejar(async (request) => {
 
   const sql = db()
   const [partida] = await sql<Partida[]>`
-    select jugador_id, juego, fin_at,
-      (extract(epoch from (now() - inicio_at)) * 1000)::int as transcurrido_ms
-    from partidas
-    where id = ${partidaId}
+    select p.jugador_id, j.nombre, j.email, p.juego, p.fin_at,
+      (extract(epoch from (now() - p.inicio_at)) * 1000)::int as transcurrido_ms
+    from partidas p
+    join jugadores j on j.id = p.jugador_id
+    where p.id = ${partidaId}
   `
   if (!partida) throw new ErrorHttp(404, 'Partida no encontrada')
   if (partida.fin_at) throw new ErrorHttp(409, 'La partida ya terminó')
@@ -56,7 +61,23 @@ export const POST = manejar(async (request) => {
   `
   if (actualizadas.count === 0) throw new ErrorHttp(409, 'La partida ya terminó')
 
-  const posicion =
-    resultado === 'gana' ? await posicionDe(partida.juego, partida.jugador_id) : null
-  return json({ resultado, duracionMs, posicion: posicion?.posicion ?? null })
+  // Ahora el ranking incluye también a quien perdió, así que siempre tiene puesto.
+  const posicion = await posicionDe(partida.juego, partida.jugador_id)
+
+  if (partida.email) {
+    // En segundo plano: la pantalla de resultado no espera al correo, y si falla no afecta la partida.
+    waitUntil(
+      enviarResultado({
+        email: partida.email,
+        nombre: partida.nombre,
+        juego: partida.juego,
+        gana: resultado === 'gana',
+        duracionMs,
+        posicion: posicion?.posicion ?? null,
+        urlPersonal: `${new URL(request.url).origin}/jugador/${partida.jugador_id}`,
+      }).catch((error) => console.error('No se pudo enviar el correo', error)),
+    )
+  }
+
+  return json({ resultado, duracionMs, posicion: resultado === 'gana' ? (posicion?.posicion ?? null) : null })
 })

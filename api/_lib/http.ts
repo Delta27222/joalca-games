@@ -54,6 +54,12 @@ export function juego(valor: unknown): JuegoId {
   throw new ErrorHttp(400, 'Juego no válido')
 }
 
+/** El ranking es público: los teléfonos solo salen con la clave de CLAVE_STAFF. */
+export function esStaff(clave: string | null): boolean {
+  const esperada = process.env.CLAVE_STAFF
+  return Boolean(esperada && clave === esperada)
+}
+
 /** "Valentina Rodríguez" → "Valentina R.": el ranking es público. */
 export function nombrePublico(nombre: string): string {
   const [primero, segundo] = nombre.trim().split(/\s+/)

@@ -417,6 +417,11 @@ button {
   justify-content: center;
 }
 
+.inicio-ranking {
+  position: relative;
+  padding: 0 36px 0 28px;
+}
+
 .tarjeta-juego {
   flex: 0 1 480px;
   min-width: min(340px, 100%);
@@ -1630,12 +1635,44 @@ ul.lista-palabras {
   align-items: center;
 }
 
+.etiqueta-no-completo {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--track);
+  font-size: 15px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.fila-ranking.no-completo .fila-tiempo {
+  opacity: 0.55;
+}
+
 .fila-tiempo {
   width: 110px;
   text-align: right;
   font-variant-numeric: tabular-nums;
   font-size: 24px;
   font-weight: 800;
+}
+
+.btn-whatsapp {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-whatsapp:active {
+  transform: translateY(2px);
 }
 
 .ranking-vacio {
