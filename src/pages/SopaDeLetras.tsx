@@ -10,7 +10,7 @@ function SopaDeLetras() {
         titulo: gana ? '¡LO LOGRASTE!' : '¡Tiempo terminado!',
         contenido: gana ? (
           <p className="resultado-detalle">
-            Encontraste {final.detalle.encontradas}/{final.detalle.encontradas + final.detalle.faltantes.length} beneficios
+            Encontraste {final.detalle.encontradas}/{final.detalle.encontradas + final.detalle.faltantes.length} ingredientes
           </p>
         ) : (
           <>

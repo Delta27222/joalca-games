@@ -94,16 +94,14 @@ describe('letras de pista', () => {
 describe('letra de ayuda de la sopa', () => {
   const t = generarTablero(SOPA.palabras, SOPA.tamano, semilla(11))
 
-  it('es la inicial o una intermedia de una palabra no encontrada, nunca la última', () => {
+  it('es la inicial de una palabra no encontrada', () => {
     const encontradas = [0, 1, 2]
     for (let s = 1; s <= 200; s++) {
       const celda = elegirPista(t.ubicaciones, encontradas, semilla(s))!
       const dueña = t.ubicaciones.find(
-        (u) => !encontradas.includes(u.indice) && u.celdas.some((c) => c.fila === celda.fila && c.col === celda.col),
+        (u) => !encontradas.includes(u.indice) && u.inicio.fila === celda.fila && u.inicio.col === celda.col,
       )
       expect(dueña).toBeDefined()
-      const pos = dueña!.celdas.findIndex((c) => c.fila === celda.fila && c.col === celda.col)
-      expect(pos).toBeLessThan(dueña!.celdas.length - 1)
     }
   })
 

@@ -144,10 +144,7 @@ export function lineaEntre(inicio: Celda, hasta: Celda, tamano: number): Celda[]
   return celdas
 }
 
-/**
- * Letra de ayuda: de una palabra aún no encontrada, su letra inicial o una
- * intermedia al azar. Nunca la última, para no regalar los dos extremos.
- */
+/** Letra de ayuda: la inicial de una palabra aún no encontrada, al azar. */
 export function elegirPista(
   ubicaciones: Ubicacion[],
   encontradas: readonly number[],
@@ -155,10 +152,7 @@ export function elegirPista(
 ): Celda | null {
   const pendientes = ubicaciones.filter((u) => !encontradas.includes(u.indice))
   if (pendientes.length === 0) return null
-  const u = pendientes[Math.floor(aleatorio() * pendientes.length)]
-  const intermedias = u.celdas.length - 2
-  if (intermedias < 1 || aleatorio() < 0.5) return u.inicio
-  return u.celdas[1 + Math.floor(aleatorio() * intermedias)]
+  return pendientes[Math.floor(aleatorio() * pendientes.length)].inicio
 }
 
 const misma = (a: Celda, b: Celda) => a.fila === b.fila && a.col === b.col
