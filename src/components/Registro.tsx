@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import {
   CODIGOS_TELEFONO,
   DIGITOS_TELEFONO,
+  DOMINIOS_EMAIL,
   limiteMs,
   TEXTO_CONSENTIMIENTO,
   type JuegoId,
@@ -17,18 +18,31 @@ type Props = {
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+// Valor del selector de dominio que muestra un campo para escribir uno propio.
+const OTRO_DOMINIO = 'otro'
+
+// En desarrollo el formulario se puede enviar vacío: lo que falte se completa
+// con este jugador de prueba. El teléfono es fijo para reusar siempre la misma fila.
+const EN_DESARROLLO = import.meta.env.DEV
+const JUGADOR_DE_PRUEBA = { nombre: 'Prueba', telefono: '0000000' }
 
 function Registro({ juego, onRegistrado }: Props) {
   // Nunca se autocompleta: en el iPad pasa una persona tras otra.
   const [nombre, setNombre] = useState('')
   const [codigo, setCodigo] = useState(CODIGOS_TELEFONO[0])
   const [telefono, setTelefono] = useState('')
-  const [email, setEmail] = useState('')
+  // El email se pide en dos partes: usuario @ dominio (del selector o escrito).
+  const [usuarioEmail, setUsuarioEmail] = useState('')
+  const [dominioEmail, setDominioEmail] = useState(DOMINIOS_EMAIL[0])
+  const [otroDominio, setOtroDominio] = useState('')
   const [consentimiento, setConsentimiento] = useState(false)
   const [intentado, setIntentado] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [errorServidor, setErrorServidor] = useState<string | null>(null)
   const altoTeclado = useAltoTeclado()
+
+  const dominio = dominioEmail === OTRO_DOMINIO ? otroDominio.trim().toLowerCase() : dominioEmail
+  const email = usuarioEmail.trim() ? `${usuarioEmail.trim()}@${dominio}` : ''
 
   const errores = {
     nombre: nombre.trim() ? null : 'Escribe tu nombre.',
@@ -36,17 +50,26 @@ function Registro({ juego, onRegistrado }: Props) {
     email: !email.trim() || EMAIL.test(email.trim()) ? null : 'Revisa el email o déjalo vacío.',
     consentimiento: consentimiento ? null : 'Debes aceptar para participar.',
   }
-  const visible = (campo: keyof typeof errores) => (intentado ? errores[campo] : null)
+  const visible = (campo: keyof typeof errores) => (intentado && !EN_DESARROLLO ? errores[campo] : null)
 
   async function enviar(evento: FormEvent) {
     evento.preventDefault()
     setIntentado(true)
     setErrorServidor(null)
-    if (Object.values(errores).some(Boolean)) return
+    if (!EN_DESARROLLO && Object.values(errores).some(Boolean)) return
+
+    const datos = EN_DESARROLLO
+      ? {
+          nombre: errores.nombre ? JUGADOR_DE_PRUEBA.nombre : nombre.trim(),
+          telefono: codigo + (errores.telefono ? JUGADOR_DE_PRUEBA.telefono : telefono),
+          email: errores.email ? '' : email,
+          consentimiento: true,
+        }
+      : { nombre: nombre.trim(), telefono: codigo + telefono, email, consentimiento }
 
     setEnviando(true)
     try {
-      const { jugadorId } = await registrar({ nombre: nombre.trim(), telefono: codigo + telefono, email: email.trim(), consentimiento })
+      const { jugadorId } = await registrar(datos)
       onRegistrado(jugadorId)
     } catch (error) {
       setErrorServidor(
@@ -58,13 +81,27 @@ function Registro({ juego, onRegistrado }: Props) {
     }
   }
 
+  // Si escriben la @ en el usuario (o pegan el email completo), lo que va
+  // después pasa al selector, o al campo de otro dominio si no está en la lista.
+  function cambiarUsuarioEmail(valor: string) {
+    const arroba = valor.indexOf('@')
+    if (arroba === -1) return setUsuarioEmail(valor)
+    setUsuarioEmail(valor.slice(0, arroba))
+    const despues = valor.slice(arroba + 1).trim().toLowerCase()
+    if (DOMINIOS_EMAIL.includes(despues)) setDominioEmail(despues)
+    else if (despues.includes('.')) {
+      setDominioEmail(OTRO_DOMINIO)
+      setOtroDominio(despues)
+    }
+  }
+
   // Intro en el teclado pasa al siguiente campo, para no tener que tocar uno
   // que quedó tapado. En el email (el último) cierra el teclado.
   function siguienteCampo(evento: KeyboardEvent<HTMLFormElement>) {
     const actual = evento.target
     if (evento.key !== 'Enter' || !(actual instanceof HTMLInputElement) || actual.type === 'checkbox') return
     evento.preventDefault()
-    const orden = ['f-nombre', 'f-tel', 'f-email']
+    const orden = ['f-nombre', 'f-tel', 'f-email', ...(dominioEmail === OTRO_DOMINIO ? ['f-email-otro'] : [])]
     const siguiente = orden[orden.indexOf(actual.id) + 1]
     if (siguiente) document.getElementById(siguiente)?.focus()
     else actual.blur()
@@ -96,6 +133,7 @@ function Registro({ juego, onRegistrado }: Props) {
         onFocus={() => setTimeout(llevarALaVista, 350)}
         noValidate
       >
+        {EN_DESARROLLO && <div className="chip">Modo desarrollo: puedes continuar sin llenar los datos.</div>}
         {errorServidor && (
           <div role="alert" className="alerta">
             {errorServidor}
@@ -149,17 +187,46 @@ function Registro({ juego, onRegistrado }: Props) {
           <label htmlFor="f-email">
             Email <span className="muted">(opcional)</span>
           </label>
-          <input
-            id="f-email"
-            type="email"
-            autoComplete="off"
-            placeholder="nombre@correo.com"
-            enterKeyHint="done"
-            maxLength={120}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            aria-invalid={!!visible('email')}
-          />
+          <div className="email">
+            <input
+              id="f-email"
+              type="email"
+              autoComplete="off"
+              placeholder="nombre"
+              enterKeyHint={dominioEmail === OTRO_DOMINIO ? 'next' : 'done'}
+              maxLength={80}
+              value={usuarioEmail}
+              onChange={(e) => cambiarUsuarioEmail(e.target.value)}
+              aria-invalid={!!visible('email')}
+            />
+            <span className="email-arroba" aria-hidden="true">
+              @
+            </span>
+            <select aria-label="Dominio del email" value={dominioEmail} onChange={(e) => setDominioEmail(e.target.value)}>
+              {DOMINIOS_EMAIL.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+              <option value={OTRO_DOMINIO}>Otro…</option>
+            </select>
+          </div>
+          {dominioEmail === OTRO_DOMINIO && (
+            <input
+              id="f-email-otro"
+              type="text"
+              inputMode="url"
+              autoComplete="off"
+              autoCapitalize="none"
+              placeholder="empresa.com"
+              aria-label="Otro dominio del email"
+              enterKeyHint="done"
+              maxLength={60}
+              value={otroDominio}
+              onChange={(e) => setOtroDominio(e.target.value.replace(/[@\s]/g, ''))}
+              aria-invalid={!!visible('email')}
+            />
+          )}
           {visible('email') && <div className="campo-error">{visible('email')}</div>}
         </div>
         <div className="campo">
