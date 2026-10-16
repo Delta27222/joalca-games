@@ -2120,6 +2120,83 @@ ul.lista-palabras {
   }
 }
 
+/* Teléfonos: filtros en rejilla, filas más compactas y paginación en dos líneas. */
+@media (max-width: 600px) {
+  .ranking-filtros {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .filtro-fecha {
+    grid-column: 1 / -1;
+  }
+
+  .filtro-fecha input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .chip-filtro {
+    padding: 0 12px;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
+  .btn-excel {
+    grid-column: 1 / -1;
+  }
+
+  .ranking-lista {
+    padding: 8px;
+  }
+
+  .fila-ranking {
+    gap: 8px;
+    padding: 6px 8px;
+  }
+
+  .medalla {
+    width: 34px;
+    height: 34px;
+    font-size: 17px;
+  }
+
+  .fila-nombre {
+    font-size: 17px;
+  }
+
+  .fila-tiempo {
+    font-size: 18px;
+  }
+
+  .etiqueta-tu,
+  .etiqueta-no-completo {
+    height: 26px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+
+  .btn-whatsapp {
+    width: 40px;
+    height: 40px;
+  }
+
+  .paginacion {
+    flex-wrap: wrap;
+  }
+
+  .paginacion-texto {
+    order: -1;
+    width: 100%;
+  }
+
+  .paginacion .btn {
+    flex: 1;
+    white-space: nowrap;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
