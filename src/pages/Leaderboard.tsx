@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import Burbujas from '../components/Burbujas.tsx'
 import LogoJoalca from '../components/LogoJoalca.tsx'
-import { AHORCADO, SOPA, type JuegoId } from '../config/juegos.ts'
-import { obtenerRanking, type FilaRanking } from '../lib/api.ts'
+import { AHORCADO, SOPA, hoy, type JuegoId } from '../config/juegos.ts'
+import { enlaceExcelRanking, obtenerRanking, type FilaRanking } from '../lib/api.ts'
 import { formatearDuracion } from '../lib/texto.ts'
 
 const PESTANAS: { juego: JuegoId; nombre: string }[] = [
@@ -44,7 +44,7 @@ const REFRESCO_MS = 15_000
 
 type Estado =
   | { tipo: 'cargando' }
-  | { tipo: 'listo'; filas: FilaRanking[]; consulta: string }
+  | { tipo: 'listo'; filas: FilaRanking[]; total: number; porPagina: number; consulta: string }
   | { tipo: 'error'; consulta: string }
 
 const CLAVE_GUARDADA = 'joalca-clave-staff'
@@ -68,18 +68,21 @@ function Leaderboard() {
   const [params, setParams] = useSearchParams()
   const juego: JuegoId = params.get('juego') === 'ahorcado' ? 'ahorcado' : 'sopa'
   const jugadorId = params.get('jugador')
+  // Sin ?fecha= se muestra el día de hoy; ?fecha=todas quita el filtro.
+  const fecha = params.get('fecha') === 'todas' ? null : (params.get('fecha') ?? hoy())
+  const pagina = Math.max(1, Number(params.get('pagina')) || 1)
   const staff = claveStaff(params.get('staff'))
   const [guardado, setEstado] = useState<Estado>({ tipo: 'cargando' })
-  // Al cambiar de pestaña, lo guardado es de otra consulta: se muestra cargando.
-  const consulta = `${juego}:${jugadorId}:${staff}`
+  // Al cambiar de pestaña, fecha o página, lo guardado es de otra consulta: se muestra cargando.
+  const consulta = `${juego}:${fecha}:${pagina}:${jugadorId}:${staff}`
   const estado: Estado = 'consulta' in guardado && guardado.consulta !== consulta ? { tipo: 'cargando' } : guardado
 
   useEffect(() => {
     let vigente = true
-    const consulta = `${juego}:${jugadorId}:${staff}`
+    const consulta = `${juego}:${fecha}:${pagina}:${jugadorId}:${staff}`
     const cargar = () =>
-      obtenerRanking(juego, jugadorId, staff)
-        .then(({ filas }) => vigente && setEstado({ tipo: 'listo', filas, consulta }))
+      obtenerRanking({ juego, fecha, pagina }, jugadorId, staff)
+        .then(({ filas, total, porPagina }) => vigente && setEstado({ tipo: 'listo', filas, total, porPagina, consulta }))
         .catch(
           () =>
             vigente &&
@@ -92,13 +95,21 @@ function Leaderboard() {
       vigente = false
       clearInterval(id)
     }
-  }, [juego, jugadorId, staff])
+  }, [juego, fecha, pagina, jugadorId, staff])
 
-  function cambiar(nuevo: JuegoId) {
+  /** Cambia parámetros de la URL; si no es un cambio de página, vuelve a la primera. */
+  function cambiar(cambios: Record<string, string | null>) {
     const siguiente = new URLSearchParams(params)
-    siguiente.set('juego', nuevo)
+    if (!('pagina' in cambios)) siguiente.delete('pagina')
+    for (const [clave, valor] of Object.entries(cambios)) {
+      if (valor === null) siguiente.delete(clave)
+      else siguiente.set(clave, valor)
+    }
     setParams(siguiente, { replace: true })
   }
+
+  const paginas = estado.tipo === 'listo' ? Math.max(1, Math.ceil(estado.total / estado.porPagina)) : 1
+  const esHoy = fecha === hoy()
 
   return (
     <main className={`pantalla ranking con-burbujas juego-${juego}`}>
@@ -125,11 +136,39 @@ function Leaderboard() {
             role="tab"
             aria-selected={p.juego === juego}
             className="pestana"
-            onClick={() => cambiar(p.juego)}
+            onClick={() => cambiar({ juego: p.juego })}
           >
             {p.nombre}
           </button>
         ))}
+      </div>
+
+      <div className="ranking-filtros">
+        <label className="filtro-fecha">
+          <span>Fecha</span>
+          <input
+            type="date"
+            value={fecha ?? ''}
+            max={hoy()}
+            onChange={(e) => cambiar({ fecha: e.target.value || 'todas' })}
+          />
+        </label>
+        <button type="button" className="chip-filtro" aria-pressed={esHoy} onClick={() => cambiar({ fecha: null })}>
+          Hoy
+        </button>
+        <button type="button" className="chip-filtro" aria-pressed={fecha === null} onClick={() => cambiar({ fecha: 'todas' })}>
+          Todas las fechas
+        </button>
+        {staff && (
+          <a className="btn btn-secundario btn-excel" href={enlaceExcelRanking({ juego, fecha, pagina }, staff)} download>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 3v12" />
+              <path d="M7 10l5 5 5-5" />
+              <path d="M5 21h14" />
+            </svg>
+            <span>Descargar Excel</span>
+          </a>
+        )}
       </div>
 
       {estado.tipo === 'cargando' && (
@@ -149,7 +188,7 @@ function Leaderboard() {
 
       {estado.tipo === 'listo' && estado.filas.length === 0 && (
         <div className="ranking-vacio">
-          <div className="titulo">Todavía nadie ha jugado</div>
+          <div className="titulo">{fecha ? (esHoy ? 'Hoy todavía nadie ha jugado' : 'Nadie jugó ese día') : 'Todavía nadie ha jugado'}</div>
           <div className="muted" style={{ fontSize: 20 }}>¡El primero en terminar se queda con el puesto #1!</div>
         </div>
       )}
@@ -157,8 +196,8 @@ function Leaderboard() {
       {estado.tipo === 'listo' && estado.filas.length > 0 && (
         <ol className="ranking-lista">
           {estado.filas.map((f, i) => {
-            // La fila del jugador fuera del top va separada del resto.
-            const separada = i > 0 && f.posicion > estado.filas[i - 1].posicion + 1
+            // La fila del jugador fuera de la página llega al final y va separada del resto.
+            const separada = i > 0 && f.posicion !== estado.filas[i - 1].posicion + 1
             return (
               <li
                 key={f.posicion}
@@ -186,6 +225,30 @@ function Leaderboard() {
             )
           })}
         </ol>
+      )}
+
+      {estado.tipo === 'listo' && estado.total > estado.porPagina && (
+        <nav className="paginacion" aria-label="Páginas del ranking">
+          <button
+            type="button"
+            className="btn btn-secundario"
+            disabled={pagina <= 1}
+            onClick={() => cambiar({ pagina: String(pagina - 1) })}
+          >
+            ← Anterior
+          </button>
+          <span className="paginacion-texto">
+            Página {Math.min(pagina, paginas)} de {paginas} · {estado.total} jugadores
+          </span>
+          <button
+            type="button"
+            className="btn btn-secundario"
+            disabled={pagina >= paginas}
+            onClick={() => cambiar({ pagina: String(pagina + 1) })}
+          >
+            Siguiente →
+          </button>
+        </nav>
       )}
     </main>
   )

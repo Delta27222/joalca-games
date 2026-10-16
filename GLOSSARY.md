@@ -9,7 +9,7 @@
 | **Bonus de tiempo** | En la sopa, al encontrar 5 palabras se suman 15 s al cronómetro, una sola vez. Por eso una sopa ganada puede durar hasta 135 s. |
 | **Letra de ayuda** | En la sopa, si pasan 15 s sin encontrar una palabra, se ilumina una letra (la inicial o una intermedia) de una palabra pendiente. |
 | **Cuenta regresiva** | El 3, 2, 1 previo a la partida. El inicio de la partida en el servidor ya la descuenta. |
-| **Ranking** | Por juego, la mejor partida terminada de cada jugador, gane o pierda. Primero los que ganaron y después los que no completaron, cada grupo por tiempo. Desempate: menos errores (ahorcado) y luego quien terminó primero. Las partidas abandonadas no entran. |
+| **Ranking** | Por juego, la mejor partida terminada de cada jugador, gane o pierda. Primero los que ganaron y después los que no completaron, cada grupo por tiempo. Desempate: menos errores (ahorcado) y luego quien terminó primero. Las partidas abandonadas no entran. La página del ranking filtra por día (hora de Caracas, por defecto hoy): con filtro, el ranking se arma solo con las partidas de ese día. La posición del resultado y de la página personal es la general. |
 | **Sorteo** | Participa todo jugador registrado que jugó, gane o pierda. Una participación por persona. |
 | **Página personal** | `/jugador/<id>`, abierta desde el QR: posición en vivo en cada juego. |
 | **Letras de pista** | En el ahorcado, 3 letras distintas al azar que se revelan al empezar (todas sus apariciones), siempre que sumen entre 5 y 8 casillas. |

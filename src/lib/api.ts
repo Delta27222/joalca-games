@@ -79,11 +79,30 @@ export type FilaRanking = {
   telefono?: string
 }
 
-export function obtenerRanking(juego: JuegoId, jugadorId: string | null, staff: string | null = null) {
-  const params = new URLSearchParams({ juego })
-  if (jugadorId) params.set('jugador', jugadorId)
+export type FiltroRanking = {
+  juego: JuegoId
+  /** "2026-10-16", o null para todas las fechas. */
+  fecha: string | null
+  pagina: number
+}
+
+function paramsRanking({ juego, fecha, pagina }: FiltroRanking, staff: string | null) {
+  const params = new URLSearchParams({ juego, fecha: fecha ?? 'todas', pagina: String(pagina) })
   if (staff) params.set('staff', staff)
-  return pedir<{ filas: FilaRanking[] }>(`/api/ranking?${params}`)
+  return params
+}
+
+export function obtenerRanking(filtro: FiltroRanking, jugadorId: string | null, staff: string | null = null) {
+  const params = paramsRanking(filtro, staff)
+  if (jugadorId) params.set('jugador', jugadorId)
+  return pedir<{ filas: FilaRanking[]; total: number; porPagina: number }>(`/api/ranking?${params}`)
+}
+
+/** Enlace de descarga del Excel con el ranking filtrado completo (solo staff). */
+export function enlaceExcelRanking(filtro: FiltroRanking, staff: string) {
+  const params = paramsRanking(filtro, staff)
+  params.delete('pagina')
+  return `/api/ranking-excel?${params}`
 }
 
 export type PosicionJugador = { posicion: number; tiempoMs: number } | null

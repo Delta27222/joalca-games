@@ -79,3 +79,11 @@ export function limiteMs(juego: JuegoId): number {
 export function limiteMaximoMs(juego: JuegoId): number {
   return juego === 'sopa' ? SOPA.limiteMs + SOPA.bonus.ms : AHORCADO.limiteMs
 }
+
+/** El evento es en Venezuela: "hoy" en el filtro del ranking es el día en Caracas. */
+export const ZONA_HORARIA = 'America/Caracas'
+
+/** Fecha de hoy en la zona del evento, como "2026-10-16". */
+export function hoy(): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: ZONA_HORARIA }).format(new Date())
+}

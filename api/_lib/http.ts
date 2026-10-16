@@ -65,3 +65,16 @@ export function nombrePublico(nombre: string): string {
   const [primero, segundo] = nombre.trim().split(/\s+/)
   return segundo ? `${primero} ${segundo[0].toUpperCase()}.` : primero
 }
+
+/** "2026-10-16" → esa fecha; vacío o "todas" → null (sin filtro). */
+export function fecha(valor: string | null): string | null {
+  if (!valor || valor === 'todas') return null
+  if (/^\d{4}-\d{2}-\d{2}$/.test(valor) && !Number.isNaN(Date.parse(valor))) return valor
+  throw new ErrorHttp(400, 'Fecha no válida')
+}
+
+/** Número de página desde 1; cualquier otra cosa cuenta como la primera. */
+export function pagina(valor: string | null): number {
+  const n = Number(valor)
+  return Number.isInteger(n) && n > 0 ? n : 1
+}

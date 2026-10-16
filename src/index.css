@@ -1700,6 +1700,82 @@ ul.lista-palabras {
   background: #f6eee5;
 }
 
+.ranking-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.filtro-fecha {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.filtro-fecha input {
+  height: 48px;
+  padding: 0 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font: 700 18px var(--font-texto);
+}
+
+.chip-filtro {
+  height: 48px;
+  padding: 0 18px;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: 800 17px var(--font-texto);
+  cursor: pointer;
+}
+
+.chip-filtro[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.btn-excel {
+  margin-left: auto;
+  height: 48px;
+  padding: 0 20px;
+  font-size: 18px;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.paginacion .btn {
+  height: 52px;
+  padding: 0 22px;
+  font-size: 19px;
+}
+
+.paginacion .btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.paginacion-texto {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 /* ---------- Página personal ---------- */
 
 .personal {
@@ -2001,6 +2077,19 @@ ul.lista-palabras {
 
   .fila-ranking {
     gap: 10px;
+  }
+
+  .btn-excel {
+    margin-left: 0;
+  }
+
+  .paginacion .btn {
+    padding: 0 14px;
+    font-size: 16px;
+  }
+
+  .paginacion-texto {
+    font-size: 15px;
   }
 
   .fila-nombre {
